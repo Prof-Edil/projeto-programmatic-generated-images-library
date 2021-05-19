@@ -8,6 +8,8 @@ import Graphics.Rasterific.Texture
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
+type Image = [CubicBezier]
+
 fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
        , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
        , (CubicBezier (V2 0.30 0.50) (V2 0.34 0.60) (V2 0.43 0.68) (V2 0.50 0.74))
@@ -58,6 +60,13 @@ fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28
        , (CubicBezier (V2 (-0.02) 0.92) (V2 0.02 0.84) (V2 0.09 0.77) (V2 0.16 0.70))
        ]
 
+testImage = [(CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))]
 
+scale :: Transformable a => Float -> a -> a
 scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
+
+flip :: Transformable a => a -> a
+flip = transform (\(V2 x y) -> V2 (1.0 - x) y)
+
+
 
