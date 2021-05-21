@@ -60,12 +60,13 @@ fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28
        , (CubicBezier (V2 (-0.02) 0.92) (V2 0.02 0.84) (V2 0.09 0.77) (V2 0.16 0.70))
        ]
 
+drawAndWrite :: String -> (Image -> Image) -> IO()
 drawAndWrite path f = do
     let white = PixelRGBA8 255 255 255 255
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1000 1000 white $
             withTexture (uniformTexture black) $ do
-                mconcat $ fmap (\b -> stroke 5 JoinRound (CapRound, CapRound) b) (scale 1000 $ f fish)
+                mconcat $ (\b -> stroke 5 JoinRound (CapRound, CapRound) b) <$> scale 1000 (f fish)
     writePng path img
 
 
