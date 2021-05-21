@@ -1,12 +1,14 @@
 module Lib where
 
-import Codec.Picture( PixelRGBA8( .. ), writePng )
+import Codec.Picture( PixelRGBA8( .. ), writePng)
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
+
+type Image = [CubicBezier]
 
 fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
        , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
@@ -58,6 +60,40 @@ fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28
        , (CubicBezier (V2 (-0.02) 0.92) (V2 0.02 0.84) (V2 0.09 0.77) (V2 0.16 0.70))
        ]
 
+drawAndWrite path f = do
+    let white = PixelRGBA8 255 255 255 255
+        black = PixelRGBA8 0 0 0 255
+        img = renderDrawing 1000 1000 white $
+            withTexture (uniformTexture black) $ do
+                mconcat $ fmap (\b -> stroke 5 JoinRound (CapRound, CapRound) b) (scale 1000 $ f fish)
+    writePng path img
 
+
+-- scale a image by a factor s
+-- CubicBezier is Transformable
+scale :: Float -> Image -> Image
 scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
 
+
+-- rotate (x, y) by an angle a (counter-clockwise) = (x2, y2), with
+-- x2 = dx + (x - dx) * cos(a) - (dy - y) * sin(a)
+-- y2 = dy - ((dy - y) * cos(a)) + ((x - dx) * sin(a))
+
+
+-- rot (x, y) by 90º 
+-- dx = dy = 1/2 
+-- x2 = 1/2 - (1/2 - y)*1 = y
+-- y2 = 1/2 - (x - 1/2) = 1 - x
+rot ::  Image -> Image
+rot = transform (\(V2 x y) -> V2 y (1-x))
+
+-- rot (x, y) by 45º 
+-- dx = dy = 0
+-- r = srqt 2
+-- x2 = x* r/2 - (-y * r/2) = r/2 * (x+y)
+-- y2 = - ( (-y * r/2)  + (x * r/2) ) r/2 * (y-x)
+-- the image must scale by a factor of r, therefore
+-- x2 = (x+y)/2
+-- y2 = (y-x)/2
+rot45 :: Image -> Image
+rot45 = transform (\(V2 x y) -> V2 ((x+y)/2) ((y-x)/2))
