@@ -8,6 +8,8 @@ import Graphics.Rasterific.Texture
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
+type Image = [CubicBezier]
+
 fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
        , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
        , (CubicBezier (V2 0.30 0.50) (V2 0.34 0.60) (V2 0.43 0.68) (V2 0.50 0.74))
@@ -58,6 +60,53 @@ fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28
        , (CubicBezier (V2 (-0.02) 0.92) (V2 0.02 0.84) (V2 0.09 0.77) (V2 0.16 0.70))
        ]
 
+testImage = [(CubicBezier (V2 0.00 0.00) (V2 (-0.08) 0.02) (V2 0.22 0.18) (V2 0.29 0.28))]
 
-scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
+--scale :: Transformable a => Float -> a -> a
+--scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
 
+-- Tile - bloco unitário
+
+scale :: Transformable a => Float -> a -> a
+scale s = transform (fmap (* s))
+
+-- Points auxiliary functions
+addSnd :: Float -> Point -> Point
+addSnd a p = p + V2 0 a
+
+addFst :: Float -> Point -> Point
+addFst a p = p + V2 a 0
+
+multFst :: Float -> Point -> Point
+multFst a p = p * V2 a 1
+
+multSnd :: Float -> Point -> Point
+multSnd a p = p * V2 1 a
+
+
+-- Base operations
+
+flip :: Transformable a => a -> a
+flip = transform (addFst 1.multFst (-1))
+
+getProp :: Fractional a => a -> a -> a
+getProp f1 f2 = f1/(f1+f2)
+
+over :: Image -> Image -> Image
+over = (++)
+
+aboveScaled :: Float -> Float -> Image -> Image -> Image
+aboveScaled f1 f2 img1 img2 = trans1 `over` trans2
+       where trans1 = transform (multSnd (getProp f1 f2)) img1
+             trans2 = transform (addSnd (getProp f1 f2).multSnd (getProp f2 f1)) img2
+
+above :: Image -> Image -> Image
+above = aboveScaled 0.5 0.5
+
+besideScaled :: Float -> Float -> Image -> Image -> Image
+besideScaled f1 f2 img1 img2 = trans1 `over` trans2
+       where trans1 = transform (multFst (getProp f1 f2)) img1
+             trans2 = transform (addFst (getProp f1 f2).multFst (getProp f2 f1)) img2
+
+beside :: Image -> Image -> Image
+beside = besideScaled 0.5 0.5

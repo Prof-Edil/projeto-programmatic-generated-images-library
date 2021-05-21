@@ -6,6 +6,10 @@ import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 import Control.Monad as M
 
+otherCurve = beside testImage (Lib.flip testImage)
+otherFish = beside fish (Lib.flip fish)
+otherFish2 = above fish (Lib.flip fish)
+twoFish = over fish (Lib.flip fish)
 
 main :: IO ()
 main = do
@@ -13,5 +17,9 @@ main = do
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1000 1000 white $
             withTexture (uniformTexture black) $ do
-                mconcat $ fmap (\b -> stroke 5 JoinRound (CapRound, CapRound) b) (scale 1000 fish)
+                mconcat $ fmap (stroke 5 JoinRound (CapRound, CapRound)) (scale 1000 otherFish)
+        img2 = renderDrawing 1000 1000 white $
+            withTexture (uniformTexture black) $ do
+                mconcat $ fmap (stroke 5 JoinRound (CapRound, CapRound)) (scale 1000 otherFish2)
     writePng "test.png" img
+    writePng "test2.png" img2
