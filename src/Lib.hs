@@ -83,14 +83,20 @@ multFst a p = p * V2 a 1
 multSnd :: Float -> Point -> Point
 multSnd a p = p * V2 1 a
 
+
 -- Base operations
 
 flip :: Transformable a => a -> a
 flip = transform (addFst 1.multFst (-1))
 
+getProp :: Fractional a => a -> a -> a
+getProp f1 f2 = f1/(f1+f2)
+
 aboveScaled :: Float -> Float -> Image -> Image -> Image
-aboveScaled f1 f2 img1 img2 = transform (multSnd f1) img1 ++ transform (addSnd f1.multSnd f2) img2
+aboveScaled f1 f2 img1 img2 = transform (multSnd (getProp f1 f2)) img1 ++ transform (addSnd (getProp f1 f2).multSnd (getProp f2 f1)) img2
 
 above :: Image -> Image -> Image
 above = aboveScaled 0.5 0.5
+
+
 

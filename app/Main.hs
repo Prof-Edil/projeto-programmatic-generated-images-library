@@ -6,8 +6,8 @@ import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 import Control.Monad as M
 
-aboveCurve = aboveScaled 0.5 0.5 testImage (Lib.flip testImage)
-aboveFish = aboveScaled 0.5 0.5 fish (Lib.flip fish)
+aboveCurve = aboveScaled 2 1 testImage (Lib.flip testImage)
+aboveFish = aboveScaled 2 1 fish (Lib.flip fish)
 
 main :: IO ()
 main = do
