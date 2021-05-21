@@ -60,13 +60,37 @@ fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28
        , (CubicBezier (V2 (-0.02) 0.92) (V2 0.02 0.84) (V2 0.09 0.77) (V2 0.16 0.70))
        ]
 
-testImage = [(CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))]
+testImage = [(CubicBezier (V2 0.00 0.00) (V2 (-0.08) 0.02) (V2 0.22 0.18) (V2 0.29 0.28))]
+
+--scale :: Transformable a => Float -> a -> a
+--scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
+
+-- Tile - bloco unitário
 
 scale :: Transformable a => Float -> a -> a
-scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
+scale s = transform (fmap (* s))
+
+-- Points auxiliary functions
+addSnd :: Float -> Point -> Point
+addSnd a p = p + V2 0 a
+
+addFst :: Float -> Point -> Point
+addFst a p = p + V2 a 0
+
+multFst :: Float -> Point -> Point
+multFst a p = p * V2 a 1
+
+multSnd :: Float -> Point -> Point
+multSnd a p = p * V2 1 a
+
+-- Base operations
 
 flip :: Transformable a => a -> a
-flip = transform (\(V2 x y) -> V2 (1.0 - x) y)
+flip = transform (addFst 1.multFst (-1))
 
+aboveScaled :: Float -> Float -> Image -> Image -> Image
+aboveScaled f1 f2 img1 img2 = transform (multSnd f1) img1 ++ transform (addSnd f1.multSnd f2) img2
 
+above :: Image -> Image -> Image
+above = aboveScaled 0.5 0.5
 
