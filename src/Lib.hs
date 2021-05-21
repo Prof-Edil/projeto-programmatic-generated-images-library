@@ -98,5 +98,8 @@ aboveScaled f1 f2 img1 img2 = transform (multSnd (getProp f1 f2)) img1 ++ transf
 above :: Image -> Image -> Image
 above = aboveScaled 0.5 0.5
 
+besideScaled :: Float -> Float -> Image -> Image -> Image
+besideScaled f1 f2 img1 img2 = transform (multFst (getProp f1 f2)) img1 ++ transform (addFst (getProp f1 f2).multFst (getProp f2 f1)) img2
 
-
+beside :: Image -> Image -> Image
+beside = besideScaled 0.5 0.5
