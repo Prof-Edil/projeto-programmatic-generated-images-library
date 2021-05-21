@@ -92,14 +92,21 @@ flip = transform (addFst 1.multFst (-1))
 getProp :: Fractional a => a -> a -> a
 getProp f1 f2 = f1/(f1+f2)
 
+over :: Image -> Image -> Image
+over = (++)
+
 aboveScaled :: Float -> Float -> Image -> Image -> Image
-aboveScaled f1 f2 img1 img2 = transform (multSnd (getProp f1 f2)) img1 ++ transform (addSnd (getProp f1 f2).multSnd (getProp f2 f1)) img2
+aboveScaled f1 f2 img1 img2 = trans1 `over` trans2
+       where trans1 = transform (multSnd (getProp f1 f2)) img1
+             trans2 = transform (addSnd (getProp f1 f2).multSnd (getProp f2 f1)) img2
 
 above :: Image -> Image -> Image
 above = aboveScaled 0.5 0.5
 
 besideScaled :: Float -> Float -> Image -> Image -> Image
-besideScaled f1 f2 img1 img2 = transform (multFst (getProp f1 f2)) img1 ++ transform (addFst (getProp f1 f2).multFst (getProp f2 f1)) img2
+besideScaled f1 f2 img1 img2 = trans1 `over` trans2
+       where trans1 = transform (multFst (getProp f1 f2)) img1
+             trans2 = transform (addFst (getProp f1 f2).multFst (getProp f2 f1)) img2
 
 beside :: Image -> Image -> Image
 beside = besideScaled 0.5 0.5
