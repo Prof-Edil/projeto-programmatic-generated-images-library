@@ -12,14 +12,6 @@ someFunc = putStrLn "someFunc"
 
 type Image = [CubicBezier]
 
-test1 = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
-       , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
-       , (CubicBezier (V2 0.55 0.96) (V2 0.49 0.90) (V2 0.40 0.83) (V2 0.35 0.80))
-       , (CubicBezier (V2 0.35 0.80) (V2 0.29 0.76) (V2 0.19 0.72) (V2 0.14 0.69))
-
-       , (CubicBezier (V2 0.10 0.15) (V2 0.14 0.18) (V2 0.18 0.22) (V2 0.18 0.25))
-       , (CubicBezier (V2 0.18 0.25) (V2 0.16 0.26) (V2 0.14 0.27) (V2 0.12 0.27))
-       , (CubicBezier (V2 0.12 0.27) (V2 0.11 0.23) (V2 0.11 0.19) (V2 0.10 0.15))]
 
 fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
        , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
@@ -135,6 +127,8 @@ besideScaled f1 f2 img1 img2 = trans1 `over` trans2
 beside :: Image -> Image -> Image
 beside = besideScaled 0.5 0.5
 
+quartet :: Image -> Image -> Image -> Image -> Image
+quartet a b c d = above (beside a b) (beside c d)
 
 
 -- rotate (x, y) by an angle a (counter-clockwise) = (x2, y2), with
@@ -174,7 +168,13 @@ blank = []
 u :: Image
 u = over (over fish2 (rot fish2)) (over (rot $ rot fish2) (rot $ rot $ rot fish2))
 
-
 t :: Image
 t = over fish (over fish2 fish3)
+
+
+side :: Integer -> Image
+side 0 = blank
+side n = quartet (side $ n-1) (side $ n-1) (rot t) t
+
+
 
