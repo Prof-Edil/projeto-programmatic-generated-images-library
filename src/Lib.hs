@@ -1,6 +1,6 @@
 module Lib where
 
-import Prelude hiding (flip)
+import Prelude hiding (flip, cycle)
 import Codec.Picture( PixelRGBA8( .. ), writePng)
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
@@ -151,3 +151,7 @@ squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ c
                   (rot $ side n i)   (u i)                  (rot $ rot $ rot $ side n i)
                   (rot $ corner n i) (rot $ rot $ side n i) (rot $ rot $ corner n i)
 
+
+cycle :: Transformable a => [a] -> [a]
+cycle i = quartet (rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ rot $ flip i) (flip i)
+ 

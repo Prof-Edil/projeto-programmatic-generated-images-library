@@ -24,6 +24,8 @@ test_squarelimit2 = drawAndWrite "img_tests/squarelimit2.png" (squarelimit 2 tes
 test_squarelimit3 = drawAndWrite "img_tests/squarelimit3.png" (squarelimit 3 testFig)
 test_squarelimit4 = drawAndWrite "img_tests/squarelimit4.png" (squarelimit 4 testFig)
 
+test_cycle = drawAndWrite "img_tests/cycle.png" (Lib.cycle fish)
+
 main :: IO ()
 main = do
   test_img
@@ -38,5 +40,5 @@ main = do
   test_corner2
   test_squarelimit2
   test_squarelimit3
-  test_squarelimit
+  test_cycle
 
