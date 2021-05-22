@@ -12,6 +12,10 @@ someFunc = putStrLn "someFunc"
 
 type Image = [CubicBezier]
 
+triangle = [ Line (V2 0.00 0.00) (V2 1.00 1.00)
+           , Line (V2 0.00 0.00) (V2 0.00 1.00)
+           , Line (V2 0.00 1.00) (V2 1.00 1.00)
+           ]
 
 fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
        , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
@@ -63,8 +67,10 @@ fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28
        , (CubicBezier (V2 (-0.02) 0.92) (V2 0.02 0.84) (V2 0.09 0.77) (V2 0.16 0.70))
        ]
 
+--FilePath é uma string específica de arquivos e diretórios
 
-drawAndWrite :: String -> Image -> IO()
+--drawAndWrite :: String -> Image -> IO()
+drawAndWrite :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> IO ()
 drawAndWrite path base_img = do
     let white = PixelRGBA8 255 255 255 255
         black = PixelRGBA8 0 0 0 255
@@ -108,26 +114,32 @@ flip = transform (addFst 1.multFst (-1))
 getProp :: Fractional a => a -> a -> a
 getProp f1 f2 = f1/(f1+f2)
 
-over :: Image -> Image -> Image
+--over :: Image -> Image -> Image
+over :: [a] -> [a] -> [a]
 over = (++)
 
-aboveScaled :: Float -> Float -> Image -> Image -> Image
+--aboveScaled :: Float -> Float -> Image -> Image -> Image
+aboveScaled :: Transformable a => Float -> Float -> [a] -> [a] -> [a]
 aboveScaled f1 f2 img1 img2 = trans1 `over` trans2
        where trans1 = transform (multSnd (getProp f1 f2)) img1
              trans2 = transform (addSnd (getProp f1 f2).multSnd (getProp f2 f1)) img2
 
-above :: Image -> Image -> Image
+--above :: Image -> Image -> Image
+above :: Transformable a => [a] -> [a] -> [a]
 above = aboveScaled 1 1
 
-besideScaled :: Float -> Float -> Image -> Image -> Image
+--besideScaled :: Float -> Float -> Image -> Image -> Image
+besideScaled :: Transformable a => Float -> Float -> [a] -> [a] -> [a]
 besideScaled f1 f2 img1 img2 = trans1 `over` trans2
        where trans1 = transform (multFst (getProp f1 f2)) img1
              trans2 = transform (addFst (getProp f1 f2).multFst (getProp f2 f1)) img2
 
-beside :: Image -> Image -> Image
+--beside :: Image -> Image -> Image
+beside :: Transformable a => [a] -> [a] -> [a]
 beside = besideScaled 1 1
 
-quartet :: Image -> Image -> Image -> Image -> Image
+--quartet :: Image -> Image -> Image -> Image -> Image
+quartet :: Transformable a => [a] -> [a] -> [a] -> [a] -> [a]
 quartet a b c d = above (beside a b) (beside c d)
 
 
@@ -140,7 +152,9 @@ quartet a b c d = above (beside a b) (beside c d)
 -- dx = dy = 1/2 
 -- x2 = 1/2 - (1/2 - y)*1 = y
 -- y2 = 1/2 - (x - 1/2) = 1 - x
-rot ::  Image -> Image
+
+--rot ::  Image -> Image
+rot :: Transformable a => a -> a
 rot = transform (addSnd (1).multSnd (-1).swap)
 
 
@@ -153,38 +167,50 @@ rot = transform (addSnd (1).multSnd (-1).swap)
 -- the image must scale by a factor of r, therefore
 -- x2 = (x+y)/2
 -- y2 = (y-x)/2
-rot45 :: Image -> Image
+
+--rot45 :: Image -> Image
+rot45 :: Transformable a => a -> a
 rot45 = transform (\p -> (*0.5) <$> (addFst (sum p).multFst 0 $ p - (swap p)))
 
-img2 :: Image -> Image
+--img2 :: Image -> Image
+img2 :: Transformable a => a -> a
 img2 = flip.rot45
 
-img3 :: Image -> Image
+--img3 :: Image -> Image
+img3 :: Transformable a => a -> a
 img3 = rot.rot.rot.img2
 
-blank :: Image
+--blank :: Image
+blank :: [a]
 blank = []
 
-u :: Image -> Image
+--u :: Image -> Image
+u :: Transformable a => [a] -> [a]
 u i = over (over image2 (rot image2)) (over (rot $ rot image2) (rot $ rot $ rot image2))
        where image2 = img2 i
 
-t :: Image -> Image
+--t :: Image -> Image
+t :: Transformable a => [a] -> [a]
 t i = over i (over (img2 i) (img3 i))
 
 
-side :: Integer -> Image -> Image
+--side :: Integer -> Image -> Image
+side :: Transformable a => Integer -> [a] -> [a]
 side 0 _ = blank
 side n i = quartet (side (n-1) i) (side (n-1) i) (rot (t i)) (t i)
 
-corner :: Integer -> Image -> Image
+--corner :: Integer -> Image -> Image
+corner :: Transformable a => Integer -> [a] -> [a]
 corner 0 _ = blank
 corner n i = quartet (corner (n-1) i) (side (n-1) i) (rot $ side (n-1) i) (u i)
 
 
-nonet :: Image -> Image -> Image ->
-         Image -> Image -> Image ->
-         Image -> Image -> Image -> Image
+--nonet :: Image -> Image -> Image ->
+--         Image -> Image -> Image ->
+--         Image -> Image -> Image -> Image
+nonet :: Transformable a => [a] -> [a] -> [a] -> 
+                            [a] -> [a] -> [a] -> 
+                            [a] -> [a] -> [a] -> [a]
 nonet  p q r
        s t u
        v w x =
@@ -192,7 +218,8 @@ nonet  p q r
               (above (besideScaled 1 2 s (beside t u)) 
               (besideScaled 1 2 v (beside w x)))
 
-squarelimit :: Integer -> Image -> Image
+--squarelimit :: Integer -> Image -> Image
+squarelimit :: Transformable a => Integer -> [a] -> [a]
 squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ corner n i)
                   (rot $ side n i)   (u i)                  (rot $ rot $ rot $ side n i)
                   (rot $ corner n i) (rot $ rot $ side n i) (rot $ rot $ corner n i)
