@@ -110,3 +110,8 @@ besideScaled f1 f2 img1 img2 = trans1 `over` trans2
 
 beside :: Image -> Image -> Image
 beside = besideScaled 0.5 0.5
+
+-- Derived functions
+
+quartet :: Image -> Image -> Image -> Image -> Image
+quartet a b c d = above (beside a b) (beside c d)
