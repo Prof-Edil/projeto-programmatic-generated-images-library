@@ -70,7 +70,7 @@ drawAndWrite path base_img = do
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1000 1000 white $
             withTexture (uniformTexture black) $ do
-                mconcat $ (\b -> stroke 5 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
+                mconcat $ (\b -> stroke 2 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
     writePng path img
 
 
@@ -178,7 +178,7 @@ side n = quartet (side $ n-1) (side $ n-1) (rot t) t
 
 corner :: Integer -> Image
 corner 0 = blank
-corner n = quartet (corner (n-1)) (side n) (rot $ side n) u
+corner n = quartet (corner (n-1)) (side (n-1)) (rot $ side (n-1)) u
 
 
 nonet :: Image -> Image -> Image ->
@@ -190,5 +190,3 @@ nonet  p q r
               aboveScaled 1 2 (besideScaled 1 2 p (besideScaled 1 1 q r)) 
               (aboveScaled 1 1 (besideScaled 1 2 s (besideScaled 1 1 t u)) 
               (besideScaled 1 2 v (besideScaled 1 1 w x)))
-
-              
