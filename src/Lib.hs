@@ -12,6 +12,15 @@ someFunc = putStrLn "someFunc"
 
 type Image = [CubicBezier]
 
+test1 = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
+       , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
+       , (CubicBezier (V2 0.55 0.96) (V2 0.49 0.90) (V2 0.40 0.83) (V2 0.35 0.80))
+       , (CubicBezier (V2 0.35 0.80) (V2 0.29 0.76) (V2 0.19 0.72) (V2 0.14 0.69))
+
+       , (CubicBezier (V2 0.10 0.15) (V2 0.14 0.18) (V2 0.18 0.22) (V2 0.18 0.25))
+       , (CubicBezier (V2 0.18 0.25) (V2 0.16 0.26) (V2 0.14 0.27) (V2 0.12 0.27))
+       , (CubicBezier (V2 0.12 0.27) (V2 0.11 0.23) (V2 0.11 0.19) (V2 0.10 0.15))]
+
 fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
        , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
        , (CubicBezier (V2 0.30 0.50) (V2 0.34 0.60) (V2 0.43 0.68) (V2 0.50 0.74))
@@ -138,7 +147,7 @@ beside = besideScaled 0.5 0.5
 -- x2 = 1/2 - (1/2 - y)*1 = y
 -- y2 = 1/2 - (x - 1/2) = 1 - x
 rot ::  Image -> Image
-rot = transform (swap.addSnd (1).multSnd (-1))
+rot = transform (addSnd (1).multSnd (-1).swap)
 
 
 
@@ -163,14 +172,3 @@ u :: Image
 u = over (over fish2 (rot fish2)) (over (rot $ rot fish2) (rot $ rot $ rot fish2))
 
 
--- quartet(u,u,u,u) = above(beside(u,u),beside(u,u))
--- cycle(p) = quartet(p, rot(p), rot(rot(p)), rot(rot(rot(p))))
--- T = cycle(rot(t))
--- - side1 = quartet(blank,blank,rot(t),t)
--- - side2 = quartet(side1,side1,rot(t),t)
--- - side[n] = quartet(side[n-1],side[n-1],rot(t),t)
--- - side = quartet(side,side,rot(t),t)
--- - corner1 = quartet(blank,blank,blank,u)
--- - corner2 = quartet(corner1,side1,rot(side1),u)
--- - corner[n] = quartet(corner[n-1],side,rot(side),u)
--- - corner = quartet(corner,side,rot(side),u)
