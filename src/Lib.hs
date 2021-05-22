@@ -117,7 +117,7 @@ aboveScaled f1 f2 img1 img2 = trans1 `over` trans2
              trans2 = transform (addSnd (getProp f1 f2).multSnd (getProp f2 f1)) img2
 
 above :: Image -> Image -> Image
-above = aboveScaled 0.5 0.5
+above = aboveScaled 1 1
 
 besideScaled :: Float -> Float -> Image -> Image -> Image
 besideScaled f1 f2 img1 img2 = trans1 `over` trans2
@@ -125,7 +125,7 @@ besideScaled f1 f2 img1 img2 = trans1 `over` trans2
              trans2 = transform (addFst (getProp f1 f2).multFst (getProp f2 f1)) img2
 
 beside :: Image -> Image -> Image
-beside = besideScaled 0.5 0.5
+beside = besideScaled 1 1
 
 quartet :: Image -> Image -> Image -> Image -> Image
 quartet a b c d = above (beside a b) (beside c d)
@@ -156,29 +156,30 @@ rot = transform (addSnd (1).multSnd (-1).swap)
 rot45 :: Image -> Image
 rot45 = transform (\p -> (*0.5) <$> (addFst (sum p).multFst 0 $ p - (swap p)))
 
-fish2 :: Image
-fish2 = flip $ rot45 fish
+img2 :: Image -> Image
+img2 = flip.rot45
 
-fish3 :: Image
-fish3 = rot $ rot $ rot fish2
+img3 :: Image -> Image
+img3 = rot.rot.rot.img2
 
 blank :: Image
 blank = []
 
-u :: Image
-u = over (over fish2 (rot fish2)) (over (rot $ rot fish2) (rot $ rot $ rot fish2))
+u :: Image -> Image
+u i = over (over image2 (rot image2)) (over (rot $ rot image2) (rot $ rot $ rot image2))
+       where image2 = img2 i
 
-t :: Image
-t = over fish (over fish2 fish3)
+t :: Image -> Image
+t i = over i (over (img2 i) (img3 i))
 
 
-side :: Integer -> Image
-side 0 = blank
-side n = quartet (side $ n-1) (side $ n-1) (rot t) t
+side :: Integer -> Image -> Image
+side 0 _ = blank
+side n i = quartet (side (n-1) i) (side (n-1) i) (rot (t i)) (t i)
 
-corner :: Integer -> Image
-corner 0 = blank
-corner n = quartet (corner (n-1)) (side (n-1)) (rot $ side (n-1)) u
+corner :: Integer -> Image -> Image
+corner 0 _ = blank
+corner n i = quartet (corner (n-1) i) (side (n-1) i) (rot $ side (n-1) i) (u i)
 
 
 nonet :: Image -> Image -> Image ->
@@ -187,10 +188,11 @@ nonet :: Image -> Image -> Image ->
 nonet  p q r
        s t u
        v w x =
-              aboveScaled 1 2 (besideScaled 1 2 p (besideScaled 1 1 q r)) 
-              (aboveScaled 1 1 (besideScaled 1 2 s (besideScaled 1 1 t u)) 
-              (besideScaled 1 2 v (besideScaled 1 1 w x)))
+              aboveScaled 1 2 (besideScaled 1 2 p (beside q r)) 
+              (above (besideScaled 1 2 s (beside t u)) 
+              (besideScaled 1 2 v (beside w x)))
 
-squarelimit n = nonet (corner n) (side n)             (rot $ rot $ rot $ corner n)
-                (rot $ side n)   u                    (rot $ rot $ rot $ side n)
-                (rot $ corner n) (rot $ rot $ side n) (rot $ rot $ corner n)
+squarelimit :: Integer -> Image -> Image
+squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ corner n i)
+                  (rot $ side n i)   (u i)                  (rot $ rot $ rot $ side n i)
+                  (rot $ corner n i) (rot $ rot $ side n i) (rot $ rot $ corner n i)
