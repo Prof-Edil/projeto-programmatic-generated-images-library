@@ -24,8 +24,7 @@ testFig = over (over testOut1 testOut2) testOut3
 --test_squarelimit3 = drawAndWrite "img_tests/squarelimit3.png" (squarelimit 3 testFig)
 --test_squarelimit4 = drawAndWrite "img_tests/squarelimit4.png" (squarelimit 4 testFig)
 --
-test_cycle = drawAndWrite "img_tests/cycle1.png" (cycle1 fish)
-test_cycle2 = drawAndWrite "img_tests/cycle2.png" (cycle2 fish)
+test_circumference = drawAndWrite "img_tests/circumference.png" (circumference fish)
 
 main :: IO ()
 main = do
@@ -42,6 +41,6 @@ main = do
   --test_squarelimit2
   --test_squarelimit3
   
-  test_cycle
-  test_cycle2
+  test_circumference
+
 
