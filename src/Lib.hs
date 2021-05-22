@@ -168,7 +168,13 @@ fish2 = flip $ rot45 fish
 fish3 :: Image
 fish3 = rot $ rot $ rot fish2
 
+blank :: Image
+blank = []
+
 u :: Image
 u = over (over fish2 (rot fish2)) (over (rot $ rot fish2) (rot $ rot $ rot fish2))
 
+
+t :: Image
+t = over fish (over fish2 fish3)
 
