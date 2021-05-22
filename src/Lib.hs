@@ -12,6 +12,7 @@ someFunc = putStrLn "someFunc"
 
 type Image = [CubicBezier]
 
+
 fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
        , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
        , (CubicBezier (V2 0.30 0.50) (V2 0.34 0.60) (V2 0.43 0.68) (V2 0.50 0.74))
@@ -69,7 +70,7 @@ drawAndWrite path base_img = do
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1000 1000 white $
             withTexture (uniformTexture black) $ do
-                mconcat $ (\b -> stroke 5 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
+                mconcat $ (\b -> stroke 2 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
     writePng path img
 
 
@@ -126,6 +127,8 @@ besideScaled f1 f2 img1 img2 = trans1 `over` trans2
 beside :: Image -> Image -> Image
 beside = besideScaled 0.5 0.5
 
+quartet :: Image -> Image -> Image -> Image -> Image
+quartet a b c d = above (beside a b) (beside c d)
 
 
 -- rotate (x, y) by an angle a (counter-clockwise) = (x2, y2), with
@@ -138,7 +141,7 @@ beside = besideScaled 0.5 0.5
 -- x2 = 1/2 - (1/2 - y)*1 = y
 -- y2 = 1/2 - (x - 1/2) = 1 - x
 rot ::  Image -> Image
-rot = transform (swap.addSnd (1).multSnd (-1))
+rot = transform (addSnd (1).multSnd (-1).swap)
 
 
 
@@ -159,18 +162,35 @@ fish2 = flip $ rot45 fish
 fish3 :: Image
 fish3 = rot $ rot $ rot fish2
 
+blank :: Image
+blank = []
+
 u :: Image
 u = over (over fish2 (rot fish2)) (over (rot $ rot fish2) (rot $ rot $ rot fish2))
 
+t :: Image
+t = over fish (over fish2 fish3)
 
--- quartet(u,u,u,u) = above(beside(u,u),beside(u,u))
--- cycle(p) = quartet(p, rot(p), rot(rot(p)), rot(rot(rot(p))))
--- T = cycle(rot(t))
--- - side1 = quartet(blank,blank,rot(t),t)
--- - side2 = quartet(side1,side1,rot(t),t)
--- - side[n] = quartet(side[n-1],side[n-1],rot(t),t)
--- - side = quartet(side,side,rot(t),t)
--- - corner1 = quartet(blank,blank,blank,u)
--- - corner2 = quartet(corner1,side1,rot(side1),u)
--- - corner[n] = quartet(corner[n-1],side,rot(side),u)
--- - corner = quartet(corner,side,rot(side),u)
+
+side :: Integer -> Image
+side 0 = blank
+side n = quartet (side $ n-1) (side $ n-1) (rot t) t
+
+corner :: Integer -> Image
+corner 0 = blank
+corner n = quartet (corner (n-1)) (side (n-1)) (rot $ side (n-1)) u
+
+
+nonet :: Image -> Image -> Image ->
+         Image -> Image -> Image ->
+         Image -> Image -> Image -> Image
+nonet  p q r
+       s t u
+       v w x =
+              aboveScaled 1 2 (besideScaled 1 2 p (besideScaled 1 1 q r)) 
+              (aboveScaled 1 1 (besideScaled 1 2 s (besideScaled 1 1 t u)) 
+              (besideScaled 1 2 v (besideScaled 1 1 w x)))
+
+squarelimit n = nonet (corner n) (side n)             (rot $ rot $ rot $ corner n)
+                (rot $ side n)   u                    (rot $ rot $ rot $ side n)
+                (rot $ corner n) (rot $ rot $ side n) (rot $ rot $ corner n)
