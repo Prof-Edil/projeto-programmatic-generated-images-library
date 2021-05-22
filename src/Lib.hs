@@ -226,13 +226,13 @@ squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ c
 
 --------------------------------------
 
-drawAndWrite2 :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> IO ()
-drawAndWrite2 path base_img = do
+drawAndWrite2 :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> Integer -> IO ()
+drawAndWrite2 path base_img n = do
     let white = PixelRGBA8 255 255 255 255
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1000 1000 white $
             withTexture (uniformTexture black) $ do
-                mconcat $ (\b -> stroke 150 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
+                mconcat $ (\b -> stroke (75/ (2 ** fromInteger (n))) JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
     writePng path img
 
 arc1 = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0.5)]
@@ -242,4 +242,15 @@ arc3 = (rot.rot) arc1
 
 arc4 = (rot.rot.rot) arc1
 
-arcs = over arc4 (over arc3 (over arc1 arc2))
+arcs 0 = over arc4 (over arc3 (over arc1 arc2))
+arcs n = quartet (arcs (n-1)) (arcs (n-1)) (arcs (n-1)) (arcs (n-1))
+
+sideArc 0 = quartet (over arc1 arc4) (arcs 0) (over arc1 arc4) (arcs 0)
+sideArc n = quartet (sideArc (n-1)) (arcs n) (sideArc (n-1)) (arcs n)
+
+cornerArc 0 = quartet (over arc1 arc4) (arcs 0) arc1 (rot $ over arc1 arc4)
+cornerArc n = quartet (sideArc (n-1)) (arcs n) (cornerArc (n-1)) (rot $ sideArc (n-1))
+
+arcLimit n = nonet ((rot.rot.rot) (cornerArc n)) ((rot.rot.rot) (sideArc n)) ((rot.rot) (cornerArc n)) 
+                     (sideArc n) (arcs (n+1)) ((rot.rot) (sideArc n)) 
+                     (cornerArc n) (rot (sideArc n)) (rot (cornerArc n))
