@@ -176,5 +176,8 @@ side :: Integer -> Image
 side 0 = blank
 side n = quartet (side $ n-1) (side $ n-1) (rot t) t
 
+corner :: Integer -> Image
+corner 0 = blank
+corner n = quartet (corner (n-1)) (side n) (rot $ side n) u
 
 

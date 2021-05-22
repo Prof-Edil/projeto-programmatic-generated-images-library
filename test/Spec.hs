@@ -8,6 +8,7 @@ test_fish3 = drawAndWrite "img_tests/fish3.png" fish3
 test_u = drawAndWrite "img_tests/u.png" u
 test_t = drawAndWrite "img_tests/t.png" t
 test_side2 = drawAndWrite "img_tests/side2.png" (side 2)
+test_corner2 = drawAndWrite "img_tests/corner2.png" (corner 2)
 
 
 main :: IO ()
@@ -20,5 +21,5 @@ main = do
   test_u
   test_t
   test_side2
-
+  test_corner2
 
