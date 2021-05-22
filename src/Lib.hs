@@ -12,11 +12,14 @@ someFunc = putStrLn "someFunc"
 
 type Image = [CubicBezier]
 
+
+triangle :: [Line]
 triangle = [ Line (V2 0.00 0.00) (V2 1.00 1.00)
            , Line (V2 0.00 0.00) (V2 0.00 1.00)
            , Line (V2 0.00 1.00) (V2 1.00 1.00)
            ]
 
+fish :: [CubicBezier]
 fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28))
        , (CubicBezier (V2 0.29 0.28) (V2 0.30 0.36) (V2 0.29 0.43) (V2 0.30 0.50))
        , (CubicBezier (V2 0.30 0.50) (V2 0.34 0.60) (V2 0.43 0.68) (V2 0.50 0.74))
@@ -78,9 +81,6 @@ drawAndWrite path base_img = do
             withTexture (uniformTexture black) $ do
                 mconcat $ (\b -> stroke 2 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
     writePng path img
-
-
-testImage = [(CubicBezier (V2 0.00 0.00) (V2 (-0.08) 0.02) (V2 0.22 0.18) (V2 0.29 0.28))]
 
 --scale :: Transformable a => Float -> a -> a
 --scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
