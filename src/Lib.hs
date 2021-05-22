@@ -232,25 +232,28 @@ drawAndWrite2 path base_img n = do
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1000 1000 white $
             withTexture (uniformTexture black) $ do
-                mconcat $ (\b -> stroke (75/ (2 ** fromInteger (n))) JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
+                mconcat $ (\b -> stroke (35/ (2 ** fromInteger (n))) JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
     writePng path img
 
-arc1 = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0.5)]
-arc2 = rot arc1
+arc :: [CubicBezier]
+arc = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0.5)]
 
-arc3 = (rot.rot) arc1
+rot3 :: Transformable a => a -> a
+rot3 = rot.rot.rot
 
-arc4 = (rot.rot.rot) arc1
+arcs :: (Transformable a) => Integer -> [a] -> [a]
+arcs 0 i = over (rot3 i) (over ((rot.rot) i) (over i (rot i)))
+arcs n i = quartet (arcs (n-1) i) (arcs (n-1) i) (arcs (n-1) i) (arcs (n-1) i)
 
-arcs 0 = over arc4 (over arc3 (over arc1 arc2))
-arcs n = quartet (arcs (n-1)) (arcs (n-1)) (arcs (n-1)) (arcs (n-1))
+sideArc :: Transformable a => Integer -> [a] -> [a]
+sideArc 0 i = quartet (over i (rot3 i)) (arcs 0 i) (over i (rot3 i)) (arcs 0 i)
+sideArc n i = quartet (sideArc (n-1) i) (arcs n i) (sideArc (n-1) i) (arcs n i)
 
-sideArc 0 = quartet (over arc1 arc4) (arcs 0) (over arc1 arc4) (arcs 0)
-sideArc n = quartet (sideArc (n-1)) (arcs n) (sideArc (n-1)) (arcs n)
+cornerArc :: Transformable a => Integer -> [a] -> [a]
+cornerArc 0 i = quartet (over i (rot3 i)) (arcs 0 i) i (rot $ over i (rot3 i))
+cornerArc n i = quartet (sideArc (n-1) i) (arcs n i) (cornerArc (n-1) i) (rot $ sideArc (n-1) i)
 
-cornerArc 0 = quartet (over arc1 arc4) (arcs 0) arc1 (rot $ over arc1 arc4)
-cornerArc n = quartet (sideArc (n-1)) (arcs n) (cornerArc (n-1)) (rot $ sideArc (n-1))
-
-arcLimit n = nonet ((rot.rot.rot) (cornerArc n)) ((rot.rot.rot) (sideArc n)) ((rot.rot) (cornerArc n)) 
-                     (sideArc n) (arcs (n+1)) ((rot.rot) (sideArc n)) 
-                     (cornerArc n) (rot (sideArc n)) (rot (cornerArc n))
+arcLimit :: Transformable a => Integer -> [a] -> [a]
+arcLimit n i = nonet (rot3 (cornerArc n i)) (rot3 (sideArc n i)) ((rot.rot) (cornerArc n i)) 
+                     (sideArc n i) (arcs (n+1) i) ((rot.rot) (sideArc n i)) 
+                     (cornerArc n i) (rot (sideArc n i)) (rot (cornerArc n i))

@@ -25,7 +25,7 @@ test_squarelimit2 = drawAndWrite "img_tests/squarelimit2.png" (squarelimit 2 tes
 test_squarelimit3 = drawAndWrite "img_tests/squarelimit3.png" (squarelimit 3 testFig)
 test_squarelimit4 = drawAndWrite "img_tests/squarelimit4.png" (squarelimit 4 testFig)
 
-test_simple_img = drawAndWrite2 "img_tests/simplefig.png" (arcLimit 1) 1
+test_simple_img = drawAndWrite2 "img_tests/simplefig.png" (arcLimit 1 arc) 1
 
 main :: IO ()
 main = do
