@@ -152,6 +152,9 @@ squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ c
                   (rot $ corner n i) (rot $ rot $ side n i) (rot $ rot $ corner n i)
 
 
-cycle :: Transformable a => [a] -> [a]
-cycle i = quartet (rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ rot $ flip i) (flip i)
- 
+cycle1 :: Transformable a => [a] -> [a]
+cycle1 i = quartet (rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ rot $ flip i) (flip i)
+
+cycle2 :: Transformable a => [a] -> [a]
+cycle2 i = quartet (flip i) (rot $ rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ flip i)
+
