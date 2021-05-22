@@ -190,3 +190,7 @@ nonet  p q r
               aboveScaled 1 2 (besideScaled 1 2 p (besideScaled 1 1 q r)) 
               (aboveScaled 1 1 (besideScaled 1 2 s (besideScaled 1 1 t u)) 
               (besideScaled 1 2 v (besideScaled 1 1 w x)))
+
+squarelimit n = nonet (corner n) (side n)             (rot $ rot $ rot $ corner n)
+                (rot $ side n)   u                    (rot $ rot $ rot $ side n)
+                (rot $ corner n) (rot $ rot $ side n) (rot $ rot $ corner n)

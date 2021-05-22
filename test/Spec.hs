@@ -9,6 +9,9 @@ test_u = drawAndWrite "img_tests/u.png" u
 test_t = drawAndWrite "img_tests/t.png" t
 test_side2 = drawAndWrite "img_tests/side2.png" (side 2)
 test_corner2 = drawAndWrite "img_tests/corner2.png" (corner 2)
+test_squarelimit2 = drawAndWrite "img_tests/squarelimit2.png" (squarelimit 2)
+test_squarelimit3 = drawAndWrite "img_tests/squarelimit3.png" (squarelimit 3)
+test_squarelimit4 = drawAndWrite "img_tests/squarelimit4.png" (squarelimit 4)
 
 main :: IO ()
 main = do
@@ -21,4 +24,7 @@ main = do
   test_t
   test_side2
   test_corner2
+  test_squarelimit2
+  test_squarelimit3
+  test_squarelimit4
 
