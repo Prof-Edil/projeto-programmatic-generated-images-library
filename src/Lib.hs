@@ -223,3 +223,23 @@ squarelimit :: Transformable a => Integer -> [a] -> [a]
 squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ corner n i)
                   (rot $ side n i)   (u i)                  (rot $ rot $ rot $ side n i)
                   (rot $ corner n i) (rot $ rot $ side n i) (rot $ rot $ corner n i)
+
+--------------------------------------
+
+drawAndWrite2 :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> IO ()
+drawAndWrite2 path base_img = do
+    let white = PixelRGBA8 255 255 255 255
+        black = PixelRGBA8 0 0 0 255
+        img = renderDrawing 1000 1000 white $
+            withTexture (uniformTexture black) $ do
+                mconcat $ (\b -> stroke 150 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
+    writePng path img
+
+arc1 = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0.5)]
+arc2 = rot arc1
+
+arc3 = (rot.rot) arc1
+
+arc4 = (rot.rot.rot) arc1
+
+arcs = over arc4 (over arc3 (over arc1 arc2))

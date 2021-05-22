@@ -25,6 +25,8 @@ test_squarelimit2 = drawAndWrite "img_tests/squarelimit2.png" (squarelimit 2 tes
 test_squarelimit3 = drawAndWrite "img_tests/squarelimit3.png" (squarelimit 3 testFig)
 test_squarelimit4 = drawAndWrite "img_tests/squarelimit4.png" (squarelimit 4 testFig)
 
+test_simple_img = drawAndWrite2 "img_tests/simplefig.png" arcs
+
 main :: IO ()
 main = do
   test_img
@@ -40,4 +42,4 @@ main = do
   test_squarelimit2
   test_squarelimit3
   test_squarelimit4
-
+  test_simple_img
