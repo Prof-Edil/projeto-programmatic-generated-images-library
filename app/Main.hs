@@ -7,5 +7,8 @@ import Graphics.Rasterific.Texture
 import Control.Monad as M
 
 
+
 main :: IO ()
-main = drawAndWrite "img_tests/rot.png" rot
+
+main = someFunc
+

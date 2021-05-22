@@ -4,6 +4,8 @@ import Codec.Picture( PixelRGBA8( .. ), writePng)
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 
+import Prelude hiding (flip)
+
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
@@ -60,20 +62,70 @@ fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28
        , (CubicBezier (V2 (-0.02) 0.92) (V2 0.02 0.84) (V2 0.09 0.77) (V2 0.16 0.70))
        ]
 
-drawAndWrite :: String -> (Image -> Image) -> IO()
-drawAndWrite path f = do
+
+drawAndWrite :: String -> Image -> IO()
+drawAndWrite path base_img = do
     let white = PixelRGBA8 255 255 255 255
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1000 1000 white $
             withTexture (uniformTexture black) $ do
-                mconcat $ (\b -> stroke 5 JoinRound (CapRound, CapRound) b) <$> scale 1000 (f fish)
+                mconcat $ (\b -> stroke 5 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
     writePng path img
 
 
--- scale a image by a factor s
--- CubicBezier is Transformable
-scale :: Float -> Image -> Image
-scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
+testImage = [(CubicBezier (V2 0.00 0.00) (V2 (-0.08) 0.02) (V2 0.22 0.18) (V2 0.29 0.28))]
+
+--scale :: Transformable a => Float -> a -> a
+--scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
+
+-- Tile - bloco unitário
+
+scale :: Transformable a => Float -> a -> a
+scale s = transform (fmap (* s))
+
+-- Points auxiliary functions
+addSnd :: Float -> Point -> Point
+addSnd a p = p + V2 0 a
+
+addFst :: Float -> Point -> Point
+addFst a p = p + V2 a 0
+
+multFst :: Float -> Point -> Point
+multFst a p = p * V2 a 1
+
+multSnd :: Float -> Point -> Point
+multSnd a p = p * V2 1 a
+
+swap :: Point -> Point 
+swap (V2 x y) = V2 y x
+
+-- Base operations
+
+flip :: Transformable a => a -> a
+flip = transform (addFst 1.multFst (-1))
+
+getProp :: Fractional a => a -> a -> a
+getProp f1 f2 = f1/(f1+f2)
+
+over :: Image -> Image -> Image
+over = (++)
+
+aboveScaled :: Float -> Float -> Image -> Image -> Image
+aboveScaled f1 f2 img1 img2 = trans1 `over` trans2
+       where trans1 = transform (multSnd (getProp f1 f2)) img1
+             trans2 = transform (addSnd (getProp f1 f2).multSnd (getProp f2 f1)) img2
+
+above :: Image -> Image -> Image
+above = aboveScaled 0.5 0.5
+
+besideScaled :: Float -> Float -> Image -> Image -> Image
+besideScaled f1 f2 img1 img2 = trans1 `over` trans2
+       where trans1 = transform (multFst (getProp f1 f2)) img1
+             trans2 = transform (addFst (getProp f1 f2).multFst (getProp f2 f1)) img2
+
+beside :: Image -> Image -> Image
+beside = besideScaled 0.5 0.5
+
 
 
 -- rotate (x, y) by an angle a (counter-clockwise) = (x2, y2), with
@@ -86,7 +138,9 @@ scale s = transform (\(V2 x y) -> V2 (x * s) (y * s))
 -- x2 = 1/2 - (1/2 - y)*1 = y
 -- y2 = 1/2 - (x - 1/2) = 1 - x
 rot ::  Image -> Image
-rot = transform (\(V2 x y) -> V2 y (1-x))
+rot = transform (swap.addSnd (1).multSnd (-1))
+
+
 
 -- rot (x, y) by 45º 
 -- dx = dy = 0
@@ -97,4 +151,26 @@ rot = transform (\(V2 x y) -> V2 y (1-x))
 -- x2 = (x+y)/2
 -- y2 = (y-x)/2
 rot45 :: Image -> Image
-rot45 = transform (\(V2 x y) -> V2 ((x+y)/2) ((y-x)/2))
+rot45 = transform (\p -> (*0.5) <$> (addFst (sum p).multFst 0 $ p - (swap p)))
+
+fish2 :: Image
+fish2 = flip $ rot45 fish
+
+fish3 :: Image
+fish3 = rot $ rot $ rot fish2
+
+u :: Image
+u = over (over fish2 (rot fish2)) (over (rot $ rot fish2) (rot $ rot $ rot fish2))
+
+
+-- quartet(u,u,u,u) = above(beside(u,u),beside(u,u))
+-- cycle(p) = quartet(p, rot(p), rot(rot(p)), rot(rot(rot(p))))
+-- T = cycle(rot(t))
+-- - side1 = quartet(blank,blank,rot(t),t)
+-- - side2 = quartet(side1,side1,rot(t),t)
+-- - side[n] = quartet(side[n-1],side[n-1],rot(t),t)
+-- - side = quartet(side,side,rot(t),t)
+-- - corner1 = quartet(blank,blank,blank,u)
+-- - corner2 = quartet(corner1,side1,rot(side1),u)
+-- - corner[n] = quartet(corner[n-1],side,rot(side),u)
+-- - corner = quartet(corner,side,rot(side),u)
