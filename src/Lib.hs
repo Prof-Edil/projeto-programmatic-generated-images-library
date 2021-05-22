@@ -1,8 +1,10 @@
 module Lib where
 
-import Codec.Picture( PixelRGBA8( .. ), writePng )
+import Codec.Picture( PixelRGBA8( .. ), writePng)
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
+
+import Prelude hiding (flip)
 
 
 someFunc :: IO ()
@@ -60,6 +62,17 @@ fish = [ (CubicBezier (V2 0.00 0.00) (V2 0.08 0.02) (V2 0.22 0.18) (V2 0.29 0.28
        , (CubicBezier (V2 (-0.02) 0.92) (V2 0.02 0.84) (V2 0.09 0.77) (V2 0.16 0.70))
        ]
 
+
+drawAndWrite :: String -> Image -> IO()
+drawAndWrite path base_img = do
+    let white = PixelRGBA8 255 255 255 255
+        black = PixelRGBA8 0 0 0 255
+        img = renderDrawing 1000 1000 white $
+            withTexture (uniformTexture black) $ do
+                mconcat $ (\b -> stroke 5 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
+    writePng path img
+
+
 testImage = [(CubicBezier (V2 0.00 0.00) (V2 (-0.08) 0.02) (V2 0.22 0.18) (V2 0.29 0.28))]
 
 --scale :: Transformable a => Float -> a -> a
@@ -83,6 +96,8 @@ multFst a p = p * V2 a 1
 multSnd :: Float -> Point -> Point
 multSnd a p = p * V2 1 a
 
+swap :: Point -> Point 
+swap (V2 x y) = V2 y x
 
 -- Base operations
 
@@ -110,3 +125,52 @@ besideScaled f1 f2 img1 img2 = trans1 `over` trans2
 
 beside :: Image -> Image -> Image
 beside = besideScaled 0.5 0.5
+
+
+
+-- rotate (x, y) by an angle a (counter-clockwise) = (x2, y2), with
+-- x2 = dx + (x - dx) * cos(a) - (dy - y) * sin(a)
+-- y2 = dy - ((dy - y) * cos(a)) + ((x - dx) * sin(a))
+
+
+-- rot (x, y) by 90º 
+-- dx = dy = 1/2 
+-- x2 = 1/2 - (1/2 - y)*1 = y
+-- y2 = 1/2 - (x - 1/2) = 1 - x
+rot ::  Image -> Image
+rot = transform (swap.addSnd (1).multSnd (-1))
+
+
+
+-- rot (x, y) by 45º 
+-- dx = dy = 0
+-- r = srqt 2
+-- x2 = x* r/2 - (-y * r/2) = r/2 * (x+y)
+-- y2 = - ( (-y * r/2)  + (x * r/2) ) r/2 * (y-x)
+-- the image must scale by a factor of r, therefore
+-- x2 = (x+y)/2
+-- y2 = (y-x)/2
+rot45 :: Image -> Image
+rot45 = transform (\p -> (*0.5) <$> (addFst (sum p).multFst 0 $ p - (swap p)))
+
+fish2 :: Image
+fish2 = flip $ rot45 fish
+
+fish3 :: Image
+fish3 = rot $ rot $ rot fish2
+
+u :: Image
+u = over (over fish2 (rot fish2)) (over (rot $ rot fish2) (rot $ rot $ rot fish2))
+
+
+-- quartet(u,u,u,u) = above(beside(u,u),beside(u,u))
+-- cycle(p) = quartet(p, rot(p), rot(rot(p)), rot(rot(rot(p))))
+-- T = cycle(rot(t))
+-- - side1 = quartet(blank,blank,rot(t),t)
+-- - side2 = quartet(side1,side1,rot(t),t)
+-- - side[n] = quartet(side[n-1],side[n-1],rot(t),t)
+-- - side = quartet(side,side,rot(t),t)
+-- - corner1 = quartet(blank,blank,blank,u)
+-- - corner2 = quartet(corner1,side1,rot(side1),u)
+-- - corner[n] = quartet(corner[n-1],side,rot(side),u)
+-- - corner = quartet(corner,side,rot(side),u)
