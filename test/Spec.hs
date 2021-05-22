@@ -1,15 +1,14 @@
 import Lib
+import Shapes
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 --fish, triangle or testFig
 
 
-testOut1 = [CubicBezier (V2 1.00 1.00) (V2 0.85 0.95) (V2 0.70 0.95) (V2 0.50 0.98)
-           ,CubicBezier (V2 0.50 0.98) (V2 0.30 0.70) (V2 0.15 0.60) (V2 0.00 1.00)
-           ]
 testOut2 = over (rot45 (Lib.flip (rot testOut1))) (rot (rot (rot45 (Lib.flip (rot testOut1))))) 
 testOut3 = transform (multFst (-1)) ((rot.rot.rot) (Lib.flip testOut1))
 testFig = over (over testOut1 testOut2) testOut3
+
 
 test_img = drawAndWrite "img_tests/img.png" testFig
 test_rot = drawAndWrite "img_tests/rot.png" (rot testFig)
@@ -39,5 +38,5 @@ main = do
   test_corner2
   test_squarelimit2
   test_squarelimit3
-  test_squarelimit4
+  test_squarelimit
 
