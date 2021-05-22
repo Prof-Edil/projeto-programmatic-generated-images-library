@@ -181,3 +181,14 @@ corner 0 = blank
 corner n = quartet (corner (n-1)) (side n) (rot $ side n) u
 
 
+nonet :: Image -> Image -> Image ->
+         Image -> Image -> Image ->
+         Image -> Image -> Image -> Image
+nonet  p q r
+       s t u
+       v w x =
+              aboveScaled 1 2 (besideScaled 1 2 p (besideScaled 1 1 q r)) 
+              (aboveScaled 1 1 (besideScaled 1 2 s (besideScaled 1 1 t u)) 
+              (besideScaled 1 2 v (besideScaled 1 1 w x)))
+
+              
