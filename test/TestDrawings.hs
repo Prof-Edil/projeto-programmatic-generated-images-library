@@ -23,7 +23,7 @@ dsemiCircles = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000
 test2 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 q1, 
          withTexture (uniformTexture blue) $ do mconcat $ drawLines 1000 2 q2]
 
-testFig          = semiCircles
+testFig          = fish
 img_base         = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  rot testFig]
 img_rot          = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  rot testFig]
 img_rot45        = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  rot45 testFig]
@@ -31,6 +31,7 @@ img_img2         = [withTexture (uniformTexture black) $ do mconcat $ drawLines 
 img_img3         = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  img3 testFig]
 img_u            = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  u testFig]
 img_t            = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  t testFig]
+img_v            = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  v testFig]
 img_quartet      = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  quartet testFig testFig testFig testFig]
 img_side2        = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  side 2 testFig]
 img_corner2      = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  corner 2 testFig]
@@ -45,4 +46,4 @@ blocksDrawing = applyFuncs (zip (colorBlocks 0) (blocks 0))
 
 scale_simpleFig = 1200
 simpleFig = [withTexture (uniformTexture black) $ do mconcat $ drawLines scale_simpleFig (35/ (2 ** 0)) arcsDrawing, 
-             withTexture (uniformTexture black) $ do mconcat $ blocksDrawing]	
+            withTexture (uniformTexture black) $ do mconcat $ blocksDrawing]	

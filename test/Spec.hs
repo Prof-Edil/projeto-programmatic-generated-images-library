@@ -9,6 +9,7 @@ test_img2 = saveDrawing "img_tests/img2.png" 1000 white img_img2
 test_img3 = saveDrawing "img_tests/img3.png" 1000 white img_img3
 test_u = saveDrawing "img_tests/u.png" 1000 white img_u
 test_t = saveDrawing "img_tests/t.png" 1000 white img_t
+test_v = saveDrawing "img_tests/v.png" 1000 white img_v
 test_quartet = saveDrawing "img_tests/quartet.png" 1000 white img_quartet
 test_side2 = saveDrawing "img_tests/side2.png" 1000 white img_side2
 test_corner2 = saveDrawing "img_tests/corner2.png" 1000 white img_corner2
@@ -29,6 +30,7 @@ main = do
   test_img3
   --test_u
   --test_t
+  test_v
   --test_quartet
   --test_side2
   --test_corner2

@@ -61,14 +61,14 @@ squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ c
                   (rot $ corner n i) (rot $ rot $ side n i) (rot $ rot $ corner n i)
 
 
-circumference :: Transformable a => [a] -> [a]
-circumference i = quartet (rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ rot $ flip i) (flip i)
+cycle :: Transformable a => [a] -> [a]
+cycle i = quartet (rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ rot $ flip i) (flip i)
 
 u_centered :: Transformable a => [a] -> [a]
 u_centered i = quartet (flip i) (rot $ rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ flip i)
 
-cycle :: Transformable a => [a] -> [a]
-cycle i = over (circumference i)  (u_centered i)
+v :: Transformable a => [a] -> [a]
+v i = cycle $ rot $ t i
 
 ---------------------------------------------
 arcs :: (Transformable a) => Integer -> [a] -> Int -> [a]
