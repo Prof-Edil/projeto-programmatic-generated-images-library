@@ -1,23 +1,10 @@
 module Lib where
 
 import Prelude hiding (flip, cycle)
-import Codec.Picture( PixelRGBA8( .. ), writePng)
 import Graphics.Rasterific
-import Graphics.Rasterific.Texture
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
-
-
-
-drawAndWrite :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> IO ()
-drawAndWrite path base_img = do
-    let white = PixelRGBA8 255 255 255 255
-        black = PixelRGBA8 0 0 0 255
-        img = renderDrawing 1000 1000 white $
-            withTexture (uniformTexture black) $ do
-                mconcat $ (\b -> stroke 2 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
-    writePng path img
 
 
 -- Tile - bloco unitário
