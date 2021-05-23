@@ -32,6 +32,7 @@ library
       JuicyPixels
     , Rasterific
     , base >=4.7 && <5
+    , random
   default-language: Haskell2010
 
 executable projeto-programmatic-generated-images-library-exe
@@ -44,6 +45,7 @@ executable projeto-programmatic-generated-images-library-exe
     , Rasterific
     , base >=4.7 && <5
     , projeto-programmatic-generated-images-library
+    , random 
   default-language: Haskell2010
 
 test-suite projeto-programmatic-generated-images-library-test
@@ -57,4 +59,5 @@ test-suite projeto-programmatic-generated-images-library-test
     , Rasterific
     , base >=4.7 && <5
     , projeto-programmatic-generated-images-library
+    , random
   default-language: Haskell2010

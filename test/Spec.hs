@@ -2,7 +2,6 @@ import Lib
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 
-
 testOut1 = [CubicBezier (V2 1.00 1.00) (V2 0.85 0.95) (V2 0.70 0.95) (V2 0.50 0.98)
            ,CubicBezier (V2 0.50 0.98) (V2 0.30 0.70) (V2 0.15 0.60) (V2 0.00 1.00)
            ]

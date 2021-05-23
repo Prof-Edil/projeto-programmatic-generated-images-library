@@ -3,7 +3,7 @@ module Lib where
 import Codec.Picture( PixelRGBA8( .. ), writePng)
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
-
+import System.Random as SR
 import Prelude hiding (flip)
 
 
@@ -232,9 +232,11 @@ drawAndWrite2 path base_img n = do
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1200 1200 white $
             withTexture (uniformTexture black) $ do
-                mapM_ (withTexture (uniformTexture recColor) . fill) (coloredBlocks n)
+                sequence_ (applyFuncs (zip (colorBlocks n) (blocks n)))
                 mconcat $ (\b -> stroke (35/ (2 ** fromInteger (n))) JoinRound (CapRound, CapRound) b) <$> scale 1200 base_img
     writePng path img
+
+applyFuncs = map (\x -> (fst x) (snd x))
 
 arc :: [CubicBezier]
 arc = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0.5)]
@@ -259,9 +261,7 @@ arcLimit n i = nonet (rot3 (cornerArc n i)) (rot3 (sideArc n i)) ((rot.rot) (cor
                      (sideArc n i) (arcs (n+1) i) ((rot.rot) (sideArc n i)) 
                      (cornerArc n i) (rot (sideArc n i)) (rot (cornerArc n i))
 
-recColor = PixelRGBA8 0xFF 0x53 0x73 255
-
-coloredBlocks n = mesh number size
+blocks n = mesh number size
     where number = round ((6*2**(fromInteger n+1))**2)
           size = 1200 / (6*2**(fromInteger n+1))
 
@@ -269,3 +269,16 @@ mesh 0 _ = []
 mesh n size = rectangle (V2 (fromInteger x*size) (fromInteger y*size)) size size : mesh (n-1) size
         where x = mod n (round (1200/size))
               y = round ((1200/size) - 1) - div (n-1) (round (1200/size))
+
+colorBlocks n = coloring number
+    where number = round ((6*2**(fromInteger n+1))**2)
+
+coloring 0 = []
+coloring n = withTexture (uniformTexture (colors !! (randomNumbers !! n))) . fill : coloring (n-1)
+
+colors = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
+          PixelRGBA8 0xEE 0xAD 0x2D 255, PixelRGBA8 0x41 0x69 0xE1 255]
+
+seed = -2554405803717694884
+
+randomNumbers = randomRs (0,3) (mkStdGen seed)
