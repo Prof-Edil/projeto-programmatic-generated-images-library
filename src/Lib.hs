@@ -156,13 +156,13 @@ squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ c
 
 --------------------------------------
 
-drawAndWrite2 :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> Integer -> IO ()
-drawAndWrite2 path base_img n = do
+drawAndWriteArcs :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> Integer -> [PixelRGBA8] -> Int -> IO ()
+drawAndWriteArcs path base_img n colors seed = do
     let white = PixelRGBA8 255 255 255 255
         black = PixelRGBA8 0 0 0 255
         img = renderDrawing 1200 1200 white $
             withTexture (uniformTexture black) $ do
-                sequence_ (applyFuncs (zip (colorBlocks n) (blocks n)))
+                sequence_ (applyFuncs (zip (colorBlocks n colors seed) (blocks n)))
                 mconcat $ (\b -> stroke (35/ (2 ** fromInteger (n))) JoinRound (CapRound, CapRound) b) <$> scale 1200 base_img
     writePng path img
 
@@ -218,21 +218,24 @@ mesh n size = rectangle (V2 (fromInteger x*size) (fromInteger y*size)) size size
         where x = mod n (round (1200/size))
               y = round ((1200/size) - 1) - div (n-1) (round (1200/size))
 
+colorBlocks :: Geometry geom => Integer -> [PixelRGBA8] -> Int -> [geom -> Drawing PixelRGBA8 ()]
 colorBlocks n = coloring number
     where number = round ((6*2**(fromInteger n+1))**2)
 
-coloring 0 = []
-coloring n = withTexture (uniformTexture (colors !! (randomNumbers !! n))) . fill : coloring (n-1)
+coloring :: Geometry geom => Int -> [PixelRGBA8] -> Int -> [geom -> Drawing PixelRGBA8 ()]
+coloring 0 _ _ = []
+coloring n xs seed = withTexture (uniformTexture (xs !! (randomNumbers 3 seed !! n))) . fill : coloring (n-1) xs seed
 
-colors :: [PixelRGBA8]
-colors = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
+colorsE :: [PixelRGBA8]
+colorsE = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
           PixelRGBA8 0xEE 0xAD 0x2D 255, PixelRGBA8 0x41 0x69 0xE1 255]
 
 seed :: Int
 seed = -2554405803717694884
 
-randomNumbers :: [Int]
-randomNumbers = randomRs (0,3) (mkStdGen seed)
+--Int > 0
+randomNumbers :: Int -> Int -> [Int]
+randomNumbers n seed = randomRs (0,n) (mkStdGen seed)
 
 circumference :: Transformable a => [a] -> [a]
 circumference i = quartet (rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ rot $ flip i) (flip i)

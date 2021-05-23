@@ -26,7 +26,7 @@ testFig = triangle --fish, triangle or testFig1
 --
 test_circumference = drawAndWrite "img_tests/circumference.png" (circumference fish)
 
-test_simple_img = drawAndWrite2 "img_tests/simplefig.png" (arcLimit 0 arc) 0
+test_simple_img = drawAndWriteArcs "img_tests/simplefig.png" (arcLimit 0 arc) 0 colorsE seed
 
 main :: IO ()
 main = do
