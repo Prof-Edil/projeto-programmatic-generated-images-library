@@ -2,12 +2,12 @@ import Lib
 import Shapes
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
---fish, triangle or testFig
-
 
 testOut2 = over (rot45 (Lib.flip (rot testOut1))) (rot (rot (rot45 (Lib.flip (rot testOut1))))) 
 testOut3 = transform (multFst (-1)) ((rot.rot.rot) (Lib.flip testOut1))
-testFig = over (over testOut1 testOut2) testOut3
+testFig1 = over (over testOut1 testOut2) testOut3
+
+testFig = triangle --fish, triangle or testFig1
 
 
 --test_img = drawAndWrite "img_tests/img.png" testFig
@@ -26,6 +26,8 @@ testFig = over (over testOut1 testOut2) testOut3
 --
 test_circumference = drawAndWrite "img_tests/circumference.png" (circumference fish)
 
+test_simple_img = drawAndWrite2 "img_tests/simplefig.png" (arcLimit 0 arc) 0
+
 main :: IO ()
 main = do
   --test_img
@@ -40,7 +42,7 @@ main = do
   --test_corner2
   --test_squarelimit2
   --test_squarelimit3
-  
+  test_simple_img
   test_circumference
 
 
