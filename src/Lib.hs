@@ -168,9 +168,6 @@ drawAndWrite2 path base_img n = do
 
 applyFuncs = map (\x -> (fst x) (snd x))
 
-arc :: [CubicBezier]
-arc = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0.5)]
-
 rot3 :: Transformable a => a -> a
 rot3 = rot.rot.rot
 
@@ -227,9 +224,11 @@ colorBlocks n = coloring number
 coloring 0 = []
 coloring n = withTexture (uniformTexture (colors !! (randomNumbers !! n))) . fill : coloring (n-1)
 
+colors :: [PixelRGBA8]
 colors = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
           PixelRGBA8 0xEE 0xAD 0x2D 255, PixelRGBA8 0x41 0x69 0xE1 255]
 
+seed :: Int
 seed = -2554405803717694884
 
 randomNumbers :: [Int]
