@@ -40,10 +40,10 @@ img_squarelimit3 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 
 img_squarelimit4 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  squarelimit 4 testFig]
 
 
-arcsDrawing = arcLimit 1 arc
+arcsDrawing = arcLimit 0 arc
 
 blocksDrawing = applyFuncs (zip (colorBlocks 0) (blocks 0))
 
 scale_simpleFig = 1200
-simpleFig = [withTexture (uniformTexture black) $ do mconcat $ drawLines scale_simpleFig (35/ (2 ** 0)) arcsDrawing, 
-            withTexture (uniformTexture black) $ do mconcat $ blocksDrawing]	
+simpleFig = [withTexture (uniformTexture black) $ do mconcat $ blocksDrawing,
+             withTexture (uniformTexture black) $ do mconcat $ drawLines scale_simpleFig (35/ (2 ** 0)) arcsDrawing]	
