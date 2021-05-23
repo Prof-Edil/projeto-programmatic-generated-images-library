@@ -244,26 +244,47 @@ arc = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0
 rot3 :: Transformable a => a -> a
 rot3 = rot.rot.rot
 
-arcs :: (Transformable a) => Integer -> [a] -> [a]
-arcs 0 i = over (rot3 i) (over ((rot.rot) i) (over i (rot i)))
-arcs n i = quartet (arcs (n-1) i) (arcs (n-1) i) (arcs (n-1) i) (arcs (n-1) i)
+arcs :: (Transformable a) => Integer -> [a] -> Int -> [a]
+arcs 0 i p = over (rot3 (img (p+10)) ) (over ((rot.rot) (img (p+11))) (over (img (p+12)) (rot (img (p+13)))))
+    where img n
+           | chance == 0 = []
+           | otherwise = i
+             where chance = randomArcs !! n
+arcs n i p = quartet (arcs (n-1) i (p+1+fromInteger n)) (arcs (n-1) i (p+2+fromInteger n))
+                     (arcs (n-1) i (p+3+fromInteger n)) (arcs (n-1) i (p+1+fromInteger n))
 
-sideArc :: Transformable a => Integer -> [a] -> [a]
-sideArc 0 i = quartet (over i (rot3 i)) (arcs 0 i) (over i (rot3 i)) (arcs 0 i)
-sideArc n i = quartet (sideArc (n-1) i) (arcs n i) (sideArc (n-1) i) (arcs n i)
+sideArc :: Transformable a => Integer -> [a] -> Int -> [a]
+sideArc 0 i p = quartet (over (img (p+6)) (rot3 (img (p+9)))) (arcs 0 i (p+1)) 
+                        (over (img (p+7)) (rot3 (img (p+8)))) (arcs 0 i (p-1))
+    where img n
+            | chance == 0 = []
+            | otherwise = i
+                where chance = randomArcs !! n
+sideArc n i p = quartet (sideArc (n-1) i (p+3+fromInteger n)) (arcs n i (p+2+fromInteger n)) 
+                        (sideArc (n-1) i (p-1+fromInteger n)) (arcs n i (p+fromInteger n))
 
-cornerArc :: Transformable a => Integer -> [a] -> [a]
-cornerArc 0 i = quartet (over i (rot3 i)) (arcs 0 i) i (rot $ over i (rot3 i))
-cornerArc n i = quartet (sideArc (n-1) i) (arcs n i) (cornerArc (n-1) i) (rot $ sideArc (n-1) i)
+cornerArc :: Transformable a => Integer -> [a] -> Int -> [a]
+cornerArc 0 i p = quartet (over (img (p+9)) (rot3 (img (p+8)))) (arcs 0 i (p+5)) 
+                          (img (p+4)) (rot $ over (img (p+6)) (rot3 (img (p+4))))
+    where img n
+            | chance == 0 = []
+            | otherwise = i
+                where chance = randomArcs !! n
+cornerArc n i p = quartet (sideArc (n-1) i (p+3+fromInteger n)) (arcs n i (p+7+fromInteger n)) 
+                          (cornerArc (n-1) i (p+6+fromInteger n)) (rot $ sideArc (n-1) i (p+3+fromInteger n))
 
 arcLimit :: Transformable a => Integer -> [a] -> [a]
-arcLimit n i = nonet (rot3 (cornerArc n i)) (rot3 (sideArc n i)) ((rot.rot) (cornerArc n i)) 
-                     (sideArc n i) (arcs (n+1) i) ((rot.rot) (sideArc n i)) 
-                     (cornerArc n i) (rot (sideArc n i)) (rot (cornerArc n i))
+arcLimit n i = nonet (rot3 (cornerArc n i 0)) (rot3 (sideArc n i 1)) ((rot.rot) (cornerArc n i 2)) 
+                     (sideArc n i 3) (arcs (n+1) i 4) ((rot.rot) (sideArc n i 5)) 
+                     (cornerArc n i 6) (rot (sideArc n i 7)) (rot (cornerArc n i 8))
+
+randomArcs :: [Int]
+randomArcs = randomRs (0,2) (mkStdGen seed)
+---------------------------------------------
 
 blocks n = mesh number size
-    where number = round ((6*2**(fromInteger n+1))**2)
-          size = 1200 / (6*2**(fromInteger n+1))
+    where number = round ((6*2**fromInteger n)**2)
+          size = 1200 / (6*2**fromInteger n)
 
 mesh 0 _ = []
 mesh n size = rectangle (V2 (fromInteger x*size) (fromInteger y*size)) size size : mesh (n-1) size
@@ -281,4 +302,5 @@ colors = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255,
 
 seed = -2554405803717694884
 
+randomNumbers :: [Int]
 randomNumbers = randomRs (0,3) (mkStdGen seed)
