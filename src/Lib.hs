@@ -2,6 +2,8 @@ module Lib where
 
 import Prelude hiding (flip, cycle)
 import Graphics.Rasterific
+import Graphics.Rasterific.Texture
+
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
@@ -61,8 +63,7 @@ beside :: Transformable a => [a] -> [a] -> [a]
 beside = besideScaled 1 1
 
 
-quartet :: Transformable a => [a] -> [a] -> [a] -> [a] -> [a]
-quartet a b c d = above (beside a b) (beside c d)
+
 
 
 -- rotate (x, y) by an angle a (counter-clockwise) = (x2, y2), with
@@ -91,59 +92,7 @@ rot45 :: Transformable a => a -> a
 rot45 = transform (\p -> (*0.5) <$> (addFst (sum p).multFst 0 $ p - (swap p)))
  
 
-img2 :: Transformable a => a -> a
-img2 = flip.rot45
-
-
-img3 :: Transformable a => a -> a
-img3 = rot.rot.rot.img2
-
-
 blank :: [a]
 blank = []
 
 
-u :: Transformable a => [a] -> [a]
-u i = over (over image2 (rot image2)) (over (rot $ rot image2) (rot $ rot $ rot image2))
-       where image2 = img2 i
-
-
-t :: Transformable a => [a] -> [a]
-t i = over i (over (img2 i) (img3 i))
-
-
-
-side :: Transformable a => Integer -> [a] -> [a]
-side 0 _ = blank
-side n i = quartet (side (n-1) i) (side (n-1) i) (rot (t i)) (t i)
-
-
-corner :: Transformable a => Integer -> [a] -> [a]
-corner 0 _ = blank
-corner n i = quartet (corner (n-1) i) (side (n-1) i) (rot $ side (n-1) i) (u i)
-
-
-nonet :: Transformable a => [a] -> [a] -> [a] -> 
-                            [a] -> [a] -> [a] -> 
-                            [a] -> [a] -> [a] -> [a]
-nonet  p q r
-       s t u
-       v w x =
-              aboveScaled 1 2 (besideScaled 1 2 p (beside q r)) 
-              (above (besideScaled 1 2 s (beside t u)) 
-              (besideScaled 1 2 v (beside w x)))
-
-squarelimit :: Transformable a => Integer -> [a] -> [a]
-squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ corner n i)
-                  (rot $ side n i)   (u i)                  (rot $ rot $ rot $ side n i)
-                  (rot $ corner n i) (rot $ rot $ side n i) (rot $ rot $ corner n i)
-
-
-circumference :: Transformable a => [a] -> [a]
-circumference i = quartet (rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ rot $ flip i) (flip i)
-
---u_centered :: Transformable a => [a] -> [a]
---u_centered i = quartet (flip i) (rot $ rot $ rot $ flip i) (rot $ flip i) (rot $ rot $ flip i)
-
---cycle :: Transformable a => [a] -> [a]
---cycle i = over (circumference i)  (u_centered i)

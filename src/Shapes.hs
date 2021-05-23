@@ -1,4 +1,3 @@
-
 module Shapes where
 
 
@@ -106,3 +105,7 @@ q4 = [CubicBezier (V2 0.0 0.9) (V2 0.4 0.8) (V2 0.8 0.5) (V2 0.9 0.0),
       CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.0 0.9) (V2 0.0 0.9),
       CubicBezier (V2 0.0 0.9) (V2 0.0 0.9) (V2 0.9 0.9) (V2 0.9 0.9), 
       CubicBezier (V2 0.9 0.0) (V2 0.9 0.0) (V2 0.9 0.9) (V2 0.9 0.9)]      
+
+arc :: [CubicBezier]
+arc = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0.5)]
+

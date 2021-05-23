@@ -37,6 +37,7 @@ library
       JuicyPixels
     , Rasterific
     , base >=4.7 && <5
+    , random
   default-language: Haskell2010
 
 executable projeto-programmatic-generated-images-library-exe
@@ -51,12 +52,14 @@ executable projeto-programmatic-generated-images-library-exe
     , Rasterific
     , base >=4.7 && <5
     , projeto-programmatic-generated-images-library
+    , random
   default-language: Haskell2010
 
 test-suite projeto-programmatic-generated-images-library-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      TestDrawings
       Paths_projeto_programmatic_generated_images_library
   hs-source-dirs:
       test
@@ -66,4 +69,5 @@ test-suite projeto-programmatic-generated-images-library-test
     , Rasterific
     , base >=4.7 && <5
     , projeto-programmatic-generated-images-library
+    , random
   default-language: Haskell2010
