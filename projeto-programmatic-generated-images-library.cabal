@@ -26,6 +26,9 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Shapes
+  other-modules:
+      Paths_projeto_programmatic_generated_images_library
   hs-source-dirs:
       src
   build-depends:
@@ -37,6 +40,8 @@ library
 
 executable projeto-programmatic-generated-images-library-exe
   main-is: Main.hs
+  other-modules:
+      Paths_projeto_programmatic_generated_images_library
   hs-source-dirs:
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
@@ -51,6 +56,8 @@ executable projeto-programmatic-generated-images-library-exe
 test-suite projeto-programmatic-generated-images-library-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
+  other-modules:
+      Paths_projeto_programmatic_generated_images_library
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
