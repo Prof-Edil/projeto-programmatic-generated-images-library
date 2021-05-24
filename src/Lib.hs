@@ -6,6 +6,7 @@ import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 import System.Random as SR
 import Prelude hiding (flip)
+import Shapes
 
 
 someFunc :: IO ()
@@ -154,7 +155,14 @@ squarelimit n i = nonet (corner n i) (side n i)             (rot $ rot $ rot $ c
                   (rot $ side n i)   (u i)                  (rot $ rot $ rot $ side n i)
                   (rot $ corner n i) (rot $ rot $ side n i) (rot $ rot $ corner n i)
 
---------------------------------------
+-------------------------------------- 
+
+genArcs :: FilePath -> Integer -> Int -> [PixelRGBA8] -> IO ()
+genArcs path n seed colors = drawAndWriteArcs path (arcLimit n arc) n colors seed
+
+
+genArcsNew :: (Geometry geom, Transformable geom) => [geom] -> FilePath -> Integer -> Int -> [PixelRGBA8] -> IO ()
+genArcsNew img path n seed colors = drawAndWriteArcs path (arcLimit n img) n colors seed
 
 drawAndWriteArcs :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> Integer -> [PixelRGBA8] -> Int -> IO ()
 drawAndWriteArcs path base_img n colors seed = do
