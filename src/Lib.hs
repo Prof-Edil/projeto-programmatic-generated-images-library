@@ -98,4 +98,27 @@ rot45 = transform (\p -> (*0.5) <$> (addFst (sum p).multFst 0 $ p - (swap p)))
 blank :: [a]
 blank = []
 
+--------------------AQUI
+-------------------------------------- 
+{-|
+genArcs :: FilePath -> Integer -> Int -> [PixelRGBA8] -> IO ()
+genArcs path n seed colors = drawAndWriteArcs path (arcLimit n arc) n colors seed
 
+
+genArcsNew :: (Geometry geom, Transformable geom) => [geom] -> FilePath -> Integer -> Int -> [PixelRGBA8] -> IO ()
+genArcsNew img path n seed colors = drawAndWriteArcs path (arcLimit n img) n colors seed
+
+createNewArc :: Float -> Float -> Float -> Float -> [CubicBezier]
+createNewArc x1 y1 x2 y2 = [CubicBezier (V2 0.5 0.0) (V2 x1 y1) (V2 x2 y2) (V2 1.0 0.5)]
+
+drawAndWriteArcs :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> Integer -> [PixelRGBA8] -> Int -> IO ()
+drawAndWriteArcs path base_img n colors seed = do
+    let white = PixelRGBA8 255 255 255 255
+        black = PixelRGBA8 0 0 0 255
+        img = renderDrawing 1200 1200 white $
+            withTexture (uniformTexture black) $ do
+                sequence_ (applyFuncs (zip (colorBlocks n colors seed) (blocks n)))
+                mconcat $ (\b -> stroke (35/ (2 ** fromInteger (n))) JoinRound (CapRound, CapRound) b) <$> scale 1200 base_img
+    writePng path img
+-}
+----------------------------

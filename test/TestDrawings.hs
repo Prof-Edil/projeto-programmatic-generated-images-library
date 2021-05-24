@@ -7,9 +7,14 @@ import Draw
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 
+import Codec.Picture( PixelRGBA8( .. ), writePng, Image) -- Tirar
 
+testOut1 = [CubicBezier (V2 1.00 1.00) (V2 0.85 0.95) (V2 0.70 0.95) (V2 0.50 0.98)
+           ,CubicBezier (V2 0.50 0.98) (V2 0.30 0.70) (V2 0.15 0.60) (V2 0.00 1.00)
+           ]
 testOut2 = over (rot45 (Lib.flip (rot testOut1))) (rot (rot (rot45 (Lib.flip (rot testOut1))))) 
 testOut3 = transform (multFst (-1)) ((rot.rot.rot) (Lib.flip testOut1))
+testSquareLimit = over (over testOut1 testOut2) testOut3
 
 testFig          = fish
 img_base         = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  rot testFig]
@@ -27,21 +32,21 @@ img_squarelimit2 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 
 img_squarelimit3 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  squarelimit 3 testFig]
 img_squarelimit4 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  squarelimit 4 testFig]
 
+testArc1 = [Line (V2 0.5 0.0) (V2 1.0 0.5)]
 
-arcsDrawing = arcLimit 0 arc
+seedE :: Int
+seedE = -2554405803717694884
 
-blocksDrawing = applyFuncs (zip (colorBlocks 0) (blocks 0))
+colorsE :: [PixelRGBA8]
+colorsE = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
+          PixelRGBA8 0xEE 0xAD 0x2D 255, PixelRGBA8 0x41 0x69 0xE1 255,
+          PixelRGBA8 0x5F 0x4B 0x8B 255, PixelRGBA8 0x4B 0x8B 0x3B 255]
 
-scale_simpleFig = 1200
-simpleFig = [withTexture (uniformTexture black) $ do mconcat $ blocksDrawing,
-  withTexture (uniformTexture black) $ do mconcat $ drawLines scale_simpleFig (35/ (2 ** 0)) arcsDrawing]
+semiCiclesFill = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 2 (randomArcs seedE) semicircle)]
+semiCicles     = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ makeQuartets 2 (randomArcs seedE) semicircle]
 
+semiCiclesSquares     = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 2 (randomArcs seedE) semicircle),
+  withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ (makeQuartets 2 (randomArcs seedE) square)]
 
-semiCiclesFill = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 2 randomArcs semicircle)]
-semiCicles     = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ makeQuartets 2 randomArcs semicircle]
-
-semiCiclesSquares     = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 2 randomArcs semicircle),
-  withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ (makeQuartets 2 randomArcs square)]
-
-semiCiclesSquaresFill = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 1 randomArcs semicircle),
-  withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ (makeQuartets 1 randomArcs square)]                     
+semiCiclesSquaresFill = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 1 (randomArcs seedE) semicircle),
+  withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ (makeQuartets 1 (randomArcs seedE) square)]                     

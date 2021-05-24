@@ -22,6 +22,4 @@ drawLines appscale strokeWidth img = (\b -> stroke strokeWidth JoinRound (CapRou
 fillForm :: (Geometry geom, Transformable geom) => FillMethod -> [geom] -> Drawing PixelRGBA8 ()
 fillForm fillMethod img = fillWithMethod fillMethod img
 
-
-
-
+---------------------------------------------

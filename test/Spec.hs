@@ -1,6 +1,7 @@
 import Draw (saveDrawing)
 import TestDrawings
-import CreateDrawings (white)
+import CreateDrawings (white, colorsD)
+import Models
 
 test_img = saveDrawing "img_tests/img.png" 1000 white img_base
 test_rot = saveDrawing "img_tests/rot.png" 1000 white img_rot
@@ -17,7 +18,16 @@ test_squarelimit2 = saveDrawing "img_tests/squarelimit2.png" 1000 white img_squa
 test_squarelimit3 = saveDrawing "img_tests/squarelimit3.png" 1000 white img_squarelimit3
 test_squarelimit4 = saveDrawing "img_tests/squarelimit4.png" 1000 white img_squarelimit4
 
-test_simple_img = saveDrawing "img_tests/simplefig.png" 1200 white simpleFig
+test_simple_img = genArcs "img_tests/simplefig.png" 0 seedE
+
+test_simple_img2 = genArcsNew testArc1 "img_tests/simplefig2.png" 0 (seedE+10) colorsD
+
+test_simple_img3 = genArcsNew testArc "img_tests/simplefig3.png" 0 (seedE+4) colorsE
+  where testArc = createNewArc 0.6 0.2 0.8 0.4
+
+test_squarelimitN = genSquareLimitNew testSquareLimit "img_tests/squarelimitN.png" 3
+
+test_semiCirclesSquaresGen = genSemiCirclesSquares "img_tests/semiCiclesSquaresGen.png" 2 (seedE+120)
 
 test_semiCicles = saveDrawing "img_tests/semiCicles.png" 1000 white semiCicles
 test_semiCiclesFill = saveDrawing "img_tests/semiCiclesFill.png" 1000 white semiCiclesFill
@@ -43,6 +53,12 @@ main = do
   test_squarelimit4
 
   test_simple_img
+  test_simple_img2
+  test_simple_img3
+
+  test_squarelimitN
+
+  test_semiCirclesSquaresGen
 
   test_semiCicles
   test_semiCiclesFill
