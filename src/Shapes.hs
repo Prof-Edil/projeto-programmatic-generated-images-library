@@ -69,5 +69,44 @@ testOut1 = [CubicBezier (V2 1.00 1.00) (V2 0.85 0.95) (V2 0.70 0.95) (V2 0.50 0.
 
 testArc1 = [Line (V2 0.5 0.0) (V2 1.0 0.5)]
 
+petal = [ toPrim $ CubicBezier (V2 0.5 0.2) (V2 0.9 0.6)
+                            (V2  0.05 1.0) (V2 0.5 1.40)
+     , toPrim $ Line (V2 0.5 1.40) (V2 1.20 0.8)
+     , toPrim $ Line (V2 1.20 0.8) (V2 0.5 0.2) ]
+
+
+pathscycle = [PathCubicBezierCurveTo (V2 0.0 0.0) (V2 0.8 0.2) (V2 0.9 0.9),
+            PathLineTo (V2 0.0 0.9), PathLineTo (V2 0.0 0.0)]            
+
+
+q1 = [CubicBezier (V2 0.0 0.0) (V2 0.1 0.4) (V2  0.4 0.7) (V2 0.9 0.9),
+      --CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.9 0.9) (V2 0.9 0.9),
+      --CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.9 0.0) (V2 0.9 0.0), 
+      CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.0 0.9) (V2 0.0 0.9),
+      CubicBezier (V2 0.0 0.9) (V2 0.0 0.9) (V2 0.9 0.9) (V2 0.9 0.9)] 
+      --CubicBezier (V2 0.9 0.0) (V2 0.9 0.0) (V2 0.9 0.9) (V2 0.9 0.9)]
+
+q2 = [CubicBezier (V2 0.9 0.0) (V2 0.75 0.2) (V2  0.4 0.7) (V2 0.0 0.9),
+      --CubicBezier (V2 0.0 0.9) (V2 0.0 0.9) (V2 0.9 0.0) (V2 0.9 0.0),
+      CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.9 0.0) (V2 0.9 0.0), 
+      CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.0 0.9) (V2 0.0 0.9),
+      CubicBezier (V2 0.0 0.9) (V2 0.0 0.9) (V2 0.9 0.9) (V2 0.9 0.9), 
+      CubicBezier (V2 0.9 0.0) (V2 0.9 0.0) (V2 0.9 0.9) (V2 0.9 0.9)]
+
+q3 = [CubicBezier (V2 0.0 0.0) (V2 0.4 0.1) (V2 0.7 0.4) (V2 0.9 0.9),
+      --CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.9 0.9) (V2 0.9 0.9),
+      CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.9 0.0) (V2 0.9 0.0), 
+      CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.0 0.9) (V2 0.0 0.9),
+      CubicBezier (V2 0.0 0.9) (V2 0.0 0.9) (V2 0.9 0.9) (V2 0.9 0.9), 
+      CubicBezier (V2 0.9 0.0) (V2 0.9 0.0) (V2 0.9 0.9) (V2 0.9 0.9)]
+
+q4 = [CubicBezier (V2 0.0 0.9) (V2 0.4 0.8) (V2 0.8 0.5) (V2 0.9 0.0),
+      --CubicBezier (V2 0.0 0.9) (V2 0.0 0.9) (V2 0.9 0.0) (V2 0.9 0.0),
+      CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.9 0.0) (V2 0.9 0.0), 
+      CubicBezier (V2 0.0 0.0) (V2 0.0 0.0) (V2 0.0 0.9) (V2 0.0 0.9),
+      CubicBezier (V2 0.0 0.9) (V2 0.0 0.9) (V2 0.9 0.9) (V2 0.9 0.9), 
+      CubicBezier (V2 0.9 0.0) (V2 0.9 0.0) (V2 0.9 0.9) (V2 0.9 0.9)]      
+
 arc :: [CubicBezier]
 arc = [CubicBezier (V2 0.5 0.0) (V2 0.5 0.2759575) (V2 0.72404248 0.5) (V2 1.0 0.5)]
+

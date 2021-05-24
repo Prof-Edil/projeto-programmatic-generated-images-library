@@ -1,27 +1,18 @@
 module Lib where
 
 import Prelude hiding (flip, cycle)
-import Codec.Picture( PixelRGBA8( .. ), writePng)
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
+<<<<<<< HEAD
 import System.Random as SR
 import Prelude hiding (flip)
 import Shapes
+=======
+>>>>>>> main
 
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
-
-
-
-drawAndWrite :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> IO ()
-drawAndWrite path base_img = do
-    let white = PixelRGBA8 255 255 255 255
-        black = PixelRGBA8 0 0 0 255
-        img = renderDrawing 1000 1000 white $
-            withTexture (uniformTexture black) $ do
-                mconcat $ (\b -> stroke 2 JoinRound (CapRound, CapRound) b) <$> scale 1000 base_img
-    writePng path img
 
 
 -- Tile - bloco unitário
@@ -78,8 +69,7 @@ beside :: Transformable a => [a] -> [a] -> [a]
 beside = besideScaled 1 1
 
 
-quartet :: Transformable a => [a] -> [a] -> [a] -> [a] -> [a]
-quartet a b c d = above (beside a b) (beside c d)
+
 
 
 -- rotate (x, y) by an angle a (counter-clockwise) = (x2, y2), with
@@ -108,18 +98,10 @@ rot45 :: Transformable a => a -> a
 rot45 = transform (\p -> (*0.5) <$> (addFst (sum p).multFst 0 $ p - (swap p)))
  
 
-img2 :: Transformable a => a -> a
-img2 = flip.rot45
-
-
-img3 :: Transformable a => a -> a
-img3 = rot.rot.rot.img2
-
-
 blank :: [a]
 blank = []
 
-
+--------------------AQUI
 u :: Transformable a => [a] -> [a]
 u i = over (over image2 (rot image2)) (over (rot $ rot image2) (rot $ rot $ rot image2))
        where image2 = img2 i
