@@ -1,6 +1,7 @@
 import Draw (saveDrawing)
 import TestDrawings
-import CreateDrawings (white)
+import CreateDrawings (white, colorsE)
+import ArcsModel
 
 test_img = saveDrawing "img_tests/img.png" 1000 white img_base
 test_rot = saveDrawing "img_tests/rot.png" 1000 white img_rot
@@ -19,7 +20,12 @@ test_squarelimit4 = saveDrawing "img_tests/squarelimit4.png" 1000 white img_squa
 
 testShapes = saveDrawing "img_tests/testShapes.png" 1000 white test2
 
-test_simple_img = saveDrawing "img_tests/simplefig.png" 1200 white simpleFig
+test_simple_img = genArcs "img_tests/simplefig.png" 0 seedE
+
+test_simple_img2 = genArcsNew testArc1 "img_tests/simplefig2.png" 0 (seedE+10) colorsE
+
+test_simple_img3 = genArcsNew testArc "img_tests/simplefig3.png" 0 (seedE+4) colorsE
+  where testArc = createNewArc 0.6 0.2 0.8 0.4
 
 main :: IO ()
 main = do
@@ -41,5 +47,6 @@ main = do
   testShapes
 
   test_simple_img
-
+  test_simple_img2
+  test_simple_img3
 

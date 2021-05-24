@@ -22,14 +22,4 @@ drawLines appscale strokeWidth img = (\b -> stroke strokeWidth JoinRound (CapRou
 fillForm :: (Geometry geom, Transformable geom) => FillMethod -> [geom] -> Drawing PixelRGBA8 ()
 fillForm fillMethod img = fillWithMethod fillMethod img
 
-
---drawAndWrite2 :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> Integer -> IO ()
---drawAndWrite2 path base_img n = do
-    --let white = PixelRGBA8 255 255 255 255
-        --black = PixelRGBA8 0 0 0 255
-        --img = renderDrawing 1200 1200 white $
-            --withTexture (uniformTexture black) $ do
-                --sequence_ (applyFuncs (zip (colorBlocks n) (blocks n)))
-                --mconcat $ (\b -> stroke (35/ (2 ** fromInteger (n))) JoinRound (CapRound, CapRound) b) <$> scale 1200 base_img
-    --writePng path img
-
+---------------------------------------------

@@ -7,6 +7,8 @@ import Draw
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 
+import Codec.Picture( PixelRGBA8( .. ), writePng, Image) -- Tirar
+
 
 testOut2 = over (rot45 (Lib.flip (rot testOut1))) (rot (rot (rot45 (Lib.flip (rot testOut1))))) 
 testOut3 = transform (multFst (-1)) ((rot.rot.rot) (Lib.flip testOut1))
@@ -39,11 +41,7 @@ img_squarelimit2 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 
 img_squarelimit3 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  squarelimit 3 testFig]
 img_squarelimit4 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  squarelimit 4 testFig]
 
+testArc1 = [Line (V2 0.5 0.0) (V2 1.0 0.5)]
 
-arcsDrawing = arcLimit 0 arc
-
-blocksDrawing = applyFuncs (zip (colorBlocks 0) (blocks 0))
-
-scale_simpleFig = 1200
-simpleFig = [withTexture (uniformTexture black) $ do mconcat $ blocksDrawing,
-             withTexture (uniformTexture black) $ do mconcat $ drawLines scale_simpleFig (35/ (2 ** 0)) arcsDrawing]	
+seedE :: Int
+seedE = -2554405803717694884
