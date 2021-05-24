@@ -164,6 +164,9 @@ genArcs path n seed colors = drawAndWriteArcs path (arcLimit n arc) n colors see
 genArcsNew :: (Geometry geom, Transformable geom) => [geom] -> FilePath -> Integer -> Int -> [PixelRGBA8] -> IO ()
 genArcsNew img path n seed colors = drawAndWriteArcs path (arcLimit n img) n colors seed
 
+createNewArc :: Float -> Float -> Float -> Float -> [CubicBezier]
+createNewArc x1 y1 x2 y2 = [CubicBezier (V2 0.5 0.0) (V2 x1 y1) (V2 x2 y2) (V2 1.0 0.5)]
+
 drawAndWriteArcs :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> Integer -> [PixelRGBA8] -> Int -> IO ()
 drawAndWriteArcs path base_img n colors seed = do
     let white = PixelRGBA8 255 255 255 255
@@ -217,7 +220,7 @@ randomArcs :: [Int]
 randomArcs = randomRs (0,2) (mkStdGen seed)
 ---------------------------------------------
 
-blocks n = mesh number size
+blocks n format = mesh number size
     where number = round ((6*2**fromInteger n)**2)
           size = 1200 / (6*2**fromInteger n)
 
