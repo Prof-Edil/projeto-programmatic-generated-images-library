@@ -11,6 +11,7 @@ import System.Random as SR
 white = PixelRGBA8 255 255 255 255
 black = PixelRGBA8 0 0 0 255
 blue  = PixelRGBA8 0 0 255 255
+fordwine  = PixelRGBA8 94 18 36 255
 
 img2 :: Transformable a => a -> a
 img2 = flip.rot45
@@ -108,7 +109,6 @@ arcLimit n i = nonet (rot3 (cornerArc n i 0)) (rot3 (sideArc n i 1)) ((rot.rot) 
 randomArcs :: [Int]
 randomArcs = randomRs (0,2) (mkStdGen seed)
 
-
 randomNumbers :: [Int]
 randomNumbers = randomRs (0,3) (mkStdGen seed)
 
@@ -140,5 +140,14 @@ colors = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255,
 
 
 -------------------------------------------
-
-
+makeQuartets :: Transformable a => Integer -> [Int] -> [a] -> [a]
+makeQuartets 0 randoml i = quartet (scale 0.85 $ rotn n1 i) (scale 0.85 $ rotn n2 i) (scale 0.85 $ rotn n3 i) (scale 0.85 $ rotn n4 i) where 
+  n1 = toInteger $ randoml !! 0
+  n2 = toInteger $ randoml !! 1
+  n3 = toInteger $ randoml !! 2
+  n4 = toInteger $ randoml !! 3
+makeQuartets n randoml i = quartet (makeQuartets (n-1) l1 i) (makeQuartets (n-1) l2 i) (makeQuartets (n-1) l3 i) (makeQuartets (n-1) l4 i) where 
+  l1 = drop 4 randoml
+  l2 = drop 4 l1
+  l3 = drop 4 l2
+  l4 = drop 4 l3
