@@ -17,19 +17,21 @@ test_squarelimit2 = saveDrawing "img_tests/squarelimit2.png" 1000 white img_squa
 test_squarelimit3 = saveDrawing "img_tests/squarelimit3.png" 1000 white img_squarelimit3
 test_squarelimit4 = saveDrawing "img_tests/squarelimit4.png" 1000 white img_squarelimit4
 
-testShapes = saveDrawing "img_tests/testShapes.png" 1000 white test2
-
 test_simple_img = saveDrawing "img_tests/simplefig.png" 1200 white simpleFig
 
-test_cycle = saveDrawing "img_tests/fillcycle.png" 1000 white testcycle
+test_semiCicles = saveDrawing "img_tests/semiCicles.png" 1000 white semiCicles
+test_semiCiclesFill = saveDrawing "img_tests/semiCiclesFill.png" 1000 white semiCiclesFill
+test_semiCiclesSquares = saveDrawing "img_tests/semiCiclesSquares.png" 1000 white semiCiclesSquares
+test_semiCiclesSquaresFill = saveDrawing "img_tests/semiCiclesSquaresFill.png" 1000 white semiCiclesSquaresFill
+
 
 main :: IO ()
 main = do
-  test_img
-  test_rot
-  test_rot45
-  test_img2
-  test_img3
+  --test_img
+  --test_rot
+  --test_rot45
+  --test_img2
+  --test_img3
   --test_u
   --test_t
   test_v
@@ -38,12 +40,12 @@ main = do
   --test_corner2
   --test_squarelimit2
   --test_squarelimit3
-  --test_squarelimit4
-
-  testShapes
+  test_squarelimit4
 
   test_simple_img
 
-  test_cycle
-
+  test_semiCicles
+  test_semiCiclesFill
+  test_semiCiclesSquares
+  test_semiCiclesSquaresFill
 
