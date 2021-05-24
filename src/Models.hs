@@ -39,7 +39,18 @@ genSquareLimit path n = saveDrawing path 1000 white (squareLimitFig n fish)
 genSquareLimitNew :: (Geometry geom, Transformable geom) => [geom] -> FilePath -> Integer -> IO ()
 genSquareLimitNew img path n = saveDrawing path 1000 white (squareLimitFig n img)
 
---test_squarelimit2 = saveDrawing "img_tests/squarelimit2.png" 1000 white img_squarelimit2
+---- Helper SquareLimit
 
 squareLimitFig :: (Geometry geom, Transformable geom) => Integer -> [geom] -> [Drawing PixelRGBA8 ()]
 squareLimitFig n img = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  squarelimit n img]
+
+----- Usable funcs SemiCirclesSquares
+
+genSemiCirclesSquares :: FilePath -> Integer -> Int -> IO ()
+genSemiCirclesSquares path n seed = saveDrawing path 1000 white (semiCirclesSquaresFig n seed)
+
+---- Helper SemiCirclesSquares
+
+semiCirclesSquaresFig :: Integer -> Int -> [Drawing PixelRGBA8 ()]
+semiCirclesSquaresFig n seed = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets n (randomArcs seed) semicircle),
+                                withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ (makeQuartets n (randomArcs seed) square)]                     

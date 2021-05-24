@@ -27,6 +27,8 @@ test_simple_img3 = genArcsNew testArc "img_tests/simplefig3.png" 0 (seedE+4) col
 
 test_squarelimitN = genSquareLimitNew testSquareLimit "img_tests/squarelimitN.png" 3
 
+test_semiCirclesSquaresGen = genSemiCirclesSquares "img_tests/semiCiclesSquaresGen.png" 2 (seedE+120)
+
 test_semiCicles = saveDrawing "img_tests/semiCicles.png" 1000 white semiCicles
 test_semiCiclesFill = saveDrawing "img_tests/semiCiclesFill.png" 1000 white semiCiclesFill
 test_semiCiclesSquares = saveDrawing "img_tests/semiCiclesSquares.png" 1000 white semiCiclesSquares
@@ -55,6 +57,8 @@ main = do
   test_simple_img3
 
   test_squarelimitN
+
+  test_semiCirclesSquaresGen
 
   test_semiCicles
   test_semiCiclesFill
