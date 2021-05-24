@@ -29,7 +29,7 @@ library
       Draw
       Lib
       Shapes
-      ArcsModel
+      Models
   hs-source-dirs:
       src
   build-depends:

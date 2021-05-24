@@ -1,7 +1,7 @@
 import Draw (saveDrawing)
 import TestDrawings
 import CreateDrawings (white, colorsD)
-import ArcsModel
+import Models
 
 test_img = saveDrawing "img_tests/img.png" 1000 white img_base
 test_rot = saveDrawing "img_tests/rot.png" 1000 white img_rot
@@ -24,6 +24,8 @@ test_simple_img2 = genArcsNew testArc1 "img_tests/simplefig2.png" 0 (seedE+10) c
 
 test_simple_img3 = genArcsNew testArc "img_tests/simplefig3.png" 0 (seedE+4) colorsE
   where testArc = createNewArc 0.6 0.2 0.8 0.4
+
+test_squarelimitN = genSquareLimitNew testSquareLimit "img_tests/squarelimitN.png" 3
 
 test_semiCicles = saveDrawing "img_tests/semiCicles.png" 1000 white semiCicles
 test_semiCiclesFill = saveDrawing "img_tests/semiCiclesFill.png" 1000 white semiCiclesFill
@@ -51,6 +53,8 @@ main = do
   test_simple_img
   test_simple_img2
   test_simple_img3
+
+  test_squarelimitN
 
   test_semiCicles
   test_semiCiclesFill
