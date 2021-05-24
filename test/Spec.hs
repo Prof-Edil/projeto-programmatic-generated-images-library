@@ -21,6 +21,8 @@ testShapes = saveDrawing "img_tests/testShapes.png" 1000 white test2
 
 test_simple_img = saveDrawing "img_tests/simplefig.png" 1200 white simpleFig
 
+test_cycle = saveDrawing "img_tests/fillcycle.png" 1000 white testcycle
+
 main :: IO ()
 main = do
   test_img
@@ -41,5 +43,7 @@ main = do
   testShapes
 
   test_simple_img
+
+  test_cycle
 
 

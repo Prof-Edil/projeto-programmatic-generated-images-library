@@ -47,3 +47,7 @@ blocksDrawing = applyFuncs (zip (colorBlocks 0) (blocks 0))
 scale_simpleFig = 1200
 simpleFig = [withTexture (uniformTexture black) $ do mconcat $ blocksDrawing,
              withTexture (uniformTexture black) $ do mconcat $ drawLines scale_simpleFig (35/ (2 ** 0)) arcsDrawing]	
+
+
+
+testcycle = [withTexture (uniformTexture blue) $ do fill $ Path (V2 0.2 0.4) True (scale 1000.0 pathscycle)]
