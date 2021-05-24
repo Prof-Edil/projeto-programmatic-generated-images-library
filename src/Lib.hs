@@ -4,7 +4,6 @@ import Prelude hiding (flip, cycle)
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
 
-
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
@@ -63,7 +62,8 @@ beside :: Transformable a => [a] -> [a] -> [a]
 beside = besideScaled 1 1
 
 
-
+getRandomIO :: Float -> Float
+getRandomIO n = 3*n 
 
 
 -- rotate (x, y) by an angle a (counter-clockwise) = (x2, y2), with
@@ -78,6 +78,9 @@ beside = besideScaled 1 1
 rot :: Transformable a => a -> a
 rot = transform (addSnd (1).multSnd (-1).swap)
 
+rotn :: Transformable a => Integer -> a -> a
+rotn 0 i = i 
+rotn n i = rot $ rotn (n-1) i
 
 
 -- rot (x, y) by 45º 

@@ -108,7 +108,6 @@ arcLimit n i = nonet (rot3 (cornerArc n i 0)) (rot3 (sideArc n i 1)) ((rot.rot) 
 randomArcs :: [Int]
 randomArcs = randomRs (0,2) (mkStdGen seed)
 
-
 randomNumbers :: [Int]
 randomNumbers = randomRs (0,3) (mkStdGen seed)
 
