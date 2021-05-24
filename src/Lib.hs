@@ -3,12 +3,6 @@ module Lib where
 import Prelude hiding (flip, cycle)
 import Graphics.Rasterific
 import Graphics.Rasterific.Texture
-<<<<<<< HEAD
-import System.Random as SR
-import Prelude hiding (flip)
-import Shapes
-=======
->>>>>>> main
 
 
 someFunc :: IO ()
