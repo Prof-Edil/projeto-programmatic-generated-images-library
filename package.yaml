@@ -23,7 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - Rasterific
 - JuicyPixels
-
+- random
 library:
   source-dirs: src
 
