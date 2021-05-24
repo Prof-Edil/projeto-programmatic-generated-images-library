@@ -1,6 +1,6 @@
 import Draw (saveDrawing)
 import TestDrawings
-import CreateDrawings (white, colorsE)
+import CreateDrawings (white, colorsD)
 import ArcsModel
 
 test_img = saveDrawing "img_tests/img.png" 1000 white img_base
@@ -22,7 +22,7 @@ testShapes = saveDrawing "img_tests/testShapes.png" 1000 white test2
 
 test_simple_img = genArcs "img_tests/simplefig.png" 0 seedE
 
-test_simple_img2 = genArcsNew testArc1 "img_tests/simplefig2.png" 0 (seedE+10) colorsE
+test_simple_img2 = genArcsNew testArc1 "img_tests/simplefig2.png" 0 (seedE+10) colorsD
 
 test_simple_img3 = genArcsNew testArc "img_tests/simplefig3.png" 0 (seedE+4) colorsE
   where testArc = createNewArc 0.6 0.2 0.8 0.4

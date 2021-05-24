@@ -16,8 +16,8 @@ black = PixelRGBA8 0 0 0 255
 blue :: PixelRGBA8
 blue  = PixelRGBA8 0 0 255 255
 
-colorsE :: [PixelRGBA8]
-colorsE = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
+colorsD :: [PixelRGBA8]
+colorsD = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
           PixelRGBA8 0xEE 0xAD 0x2D 255, PixelRGBA8 0x41 0x69 0xE1 255]
 
 ----------------------------------------
@@ -143,7 +143,7 @@ colorBlocks n = coloring number
 
 coloring :: Geometry geom => Int -> [PixelRGBA8] -> Int -> [geom -> Drawing PixelRGBA8 ()]
 coloring 0 _ _ = []
-coloring n xs seed = withTexture (uniformTexture (xs !! (randomNumbers 3 seed !! n))) . fill : coloring (n-1) xs seed
+coloring n xs seed = withTexture (uniformTexture (xs !! (randomNumbers (length xs - 1) seed !! n))) . fill : coloring (n-1) xs seed
 
 
 -------------------------------------------

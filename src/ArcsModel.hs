@@ -11,7 +11,7 @@ import Graphics.Rasterific.Texture
 ----- Usable funcs
 
 genArcs :: FilePath -> Integer -> Int -> IO ()
-genArcs path n seed = saveDrawing path scaleSimpleFig white (simpleFig n seed colorsE arc)
+genArcs path n seed = saveDrawing path scaleSimpleFig white (simpleFig n seed colorsD arc)
 
 genArcsNew :: (Geometry geom, Transformable geom) => [geom] -> FilePath -> Integer -> Int -> [PixelRGBA8] -> IO ()
 genArcsNew img path n seed colors = saveDrawing path scaleSimpleFig white (simpleFig n seed colors img)
