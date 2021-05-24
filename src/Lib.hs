@@ -13,7 +13,7 @@ someFunc = putStrLn "someFunc"
 scale :: Transformable a => Float -> a -> a
 scale s = transform (fmap (* s))
 
--- Points auxiliary functions
+-- Funções auxiliares para manipulação dos pontos
 addSnd :: Float -> Point -> Point
 addSnd a p = p + V2 0 a
 
@@ -29,7 +29,7 @@ multSnd a p = p * V2 1 a
 swap :: Point -> Point 
 swap (V2 x y) = V2 y x
 
--- Base operations
+-- Operações base
 
 flip :: Transformable a => a -> a
 flip = transform (addFst 1.multFst (-1))

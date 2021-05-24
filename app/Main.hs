@@ -11,4 +11,3 @@ import Control.Monad as M
 main :: IO ()
 
 main = someFunc
-
