@@ -25,7 +25,7 @@ test_simple_img2 = genArcsNew testArc1 "img_tests/simplefig2.png" 0 (seedE+10) c
 test_simple_img3 = genArcsNew testArc "img_tests/simplefig3.png" 0 (seedE+4) colorsE
   where testArc = createNewArc 0.6 0.2 0.8 0.4
 
-test_squarelimitN = genSquareLimitNew testSquareLimit "img_tests/squarelimitN.png" 1
+test_squarelimitN = genSquareLimitNew (createNewPattern testOut1) "img_tests/squarelimitN.png" 1
 
 test_semiCirclesSquaresGen = genSemiCirclesSquares "img_tests/semiCiclesSquaresGen.png" 2 (seedE+120)
 

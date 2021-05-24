@@ -39,10 +39,19 @@ genSquareLimit path n = saveDrawing path 1000 white (squareLimitFig n fish)
 genSquareLimitNew :: (Geometry geom, Transformable geom) => [geom] -> FilePath -> Integer -> IO ()
 genSquareLimitNew img path n = saveDrawing path 1000 white (squareLimitFig n img)
 
+createNewPattern :: Transformable a => [a] -> [a]
+createNewPattern img = over (over img (imgVar2 img)) (imgVar3 img)
+
 ---- Funções auxiliares - SquareLimit
 
 squareLimitFig :: (Geometry geom, Transformable geom) => Integer -> [geom] -> [Drawing PixelRGBA8 ()]
 squareLimitFig n img = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  squarelimit n img]
+
+imgVar2 :: Transformable a => [a] -> [a]
+imgVar2 img = over (rot45 (Lib.flip (rot img))) (rot (rot (rot45 (Lib.flip (rot img)))))
+
+imgVar3 :: Transformable a => a -> a
+imgVar3 img = transform (multFst (-1)) ((rot.rot.rot) (Lib.flip img))
 
 ----- Funções de SemiCirclesSquares
 

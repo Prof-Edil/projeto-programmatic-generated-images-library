@@ -12,9 +12,6 @@ import Codec.Picture( PixelRGBA8( .. ), writePng, Image) -- Tirar
 testOut1 = [CubicBezier (V2 1.00 1.00) (V2 0.85 0.95) (V2 0.70 0.95) (V2 0.50 0.98)
            ,CubicBezier (V2 0.50 0.98) (V2 0.30 0.70) (V2 0.15 0.60) (V2 0.00 1.00)
            ]
-testOut2 = over (rot45 (Lib.flip (rot testOut1))) (rot (rot (rot45 (Lib.flip (rot testOut1))))) 
-testOut3 = transform (multFst (-1)) ((rot.rot.rot) (Lib.flip testOut1))
-testSquareLimit = over (over testOut1 testOut2) testOut3
 
 testFig          = fish
 img_base         = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  rot testFig]
