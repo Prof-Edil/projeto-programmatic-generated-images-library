@@ -13,18 +13,6 @@ import Codec.Picture( PixelRGBA8( .. ), writePng, Image) -- Tirar
 testOut2 = over (rot45 (Lib.flip (rot testOut1))) (rot (rot (rot45 (Lib.flip (rot testOut1))))) 
 testOut3 = transform (multFst (-1)) ((rot.rot.rot) (Lib.flip testOut1))
 
-semiCircles1 = quartet q1 q1 q1 q4
-semiCircles2 = quartet q4 q2 q2 q3
-semiCircles3 = quartet q2 q3 q1 q1
-semiCircles4 = quartet q1 q3 q4 q1
-semiCircles  = quartet semiCircles1 semiCircles2 semiCircles3 semiCircles4
-
-dsemiCircles = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ semiCircles]
-
-
-test2 = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 q1, 
-         withTexture (uniformTexture blue) $ do mconcat $ drawLines 1000 2 q2]
-
 testFig          = fish
 img_base         = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  rot testFig]
 img_rot          = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $  rot testFig]
@@ -50,3 +38,12 @@ colorsE :: [PixelRGBA8]
 colorsE = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
           PixelRGBA8 0xEE 0xAD 0x2D 255, PixelRGBA8 0x41 0x69 0xE1 255,
           PixelRGBA8 0x5F 0x4B 0x8B 255, PixelRGBA8 0x4B 0x8B 0x3B 255]
+
+semiCiclesFill = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 2 (randomArcs seedE) semicircle)]
+semiCicles     = [withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ makeQuartets 2 (randomArcs seedE) semicircle]
+
+semiCiclesSquares     = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 2 (randomArcs seedE) semicircle),
+  withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ (makeQuartets 2 (randomArcs seedE) square)]
+
+semiCiclesSquaresFill = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets 1 (randomArcs seedE) semicircle),
+  withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ (makeQuartets 1 (randomArcs seedE) square)]                     

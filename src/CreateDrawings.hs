@@ -15,6 +15,7 @@ black :: PixelRGBA8
 black = PixelRGBA8 0 0 0 255
 blue :: PixelRGBA8
 blue  = PixelRGBA8 0 0 255 255
+fordwine  = PixelRGBA8 94 18 36 255
 
 colorsD :: [PixelRGBA8]
 colorsD = [PixelRGBA8 0xE9 0xE3 0xCE 255, PixelRGBA8 0xFF 0x53 0x73 255, 
@@ -147,5 +148,14 @@ coloring n xs seed = withTexture (uniformTexture (xs !! (randomNumbers (length x
 
 
 -------------------------------------------
-
-
+makeQuartets :: Transformable a => Integer -> [Int] -> [a] -> [a]
+makeQuartets 0 randoml i = quartet (scale 0.85 $ rotn n1 i) (scale 0.85 $ rotn n2 i) (scale 0.85 $ rotn n3 i) (scale 0.85 $ rotn n4 i) where 
+  n1 = toInteger $ randoml !! 0
+  n2 = toInteger $ randoml !! 1
+  n3 = toInteger $ randoml !! 2
+  n4 = toInteger $ randoml !! 3
+makeQuartets n randoml i = quartet (makeQuartets (n-1) l1 i) (makeQuartets (n-1) l2 i) (makeQuartets (n-1) l3 i) (makeQuartets (n-1) l4 i) where 
+  l1 = drop 4 randoml
+  l2 = drop 4 l1
+  l3 = drop 4 l2
+  l4 = drop 4 l3
