@@ -65,11 +65,11 @@ imgVar3 img = transform (multFst (-1)) ((rot.rot.rot) (Lib.flip img))
 ----- Funções de SemiCirclesSquares
 
 -- Gera e salva o padrão SemiCirclesSquares usando a imagem default
-genSemiCirclesSquares :: FilePath -> Integer -> Int -> IO ()
-genSemiCirclesSquares path n seed = saveDrawing path 1000 white (semiCirclesSquaresFig n seed)
+genTruchet :: FilePath -> Integer -> Int -> IO ()
+genTruchet path n seed = saveDrawing path 1000 white (truchetFig n seed)
 
 ---- Funções auxiliares - SemiCirclesSquares
 
-semiCirclesSquaresFig :: Integer -> Int -> [Drawing PixelRGBA8 ()]
-semiCirclesSquaresFig n seed = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets n (randomArcs seed) semicircle),
+truchetFig :: Integer -> Int -> [Drawing PixelRGBA8 ()]
+truchetFig n seed = [withTexture (uniformTexture fordwine) $ do fill $ scale 1000.0 (makeQuartets n (randomArcs seed) semicircle),
                                 withTexture (uniformTexture black) $ do mconcat $ drawLines 1000 2 $ (makeQuartets n (randomArcs seed) square)]                     

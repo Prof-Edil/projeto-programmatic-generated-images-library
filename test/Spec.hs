@@ -18,16 +18,16 @@ test_squarelimit2 = saveDrawing "img_tests/squarelimit2.png" 1000 white img_squa
 test_squarelimit3 = saveDrawing "img_tests/squarelimit3.png" 1000 white img_squarelimit3
 test_squarelimit4 = saveDrawing "img_tests/squarelimit4.png" 1000 white img_squarelimit4
 
-test_simple_img = genArcs "img_tests/simplefig.png" 0 seedE
+test_simple_img = genArcs "img_tests/simplefig.png" 1 seedE
 
-test_simple_img2 = genArcsNew testArc1 "img_tests/simplefig2.png" 0 (seedE+10) colorsD
+test_simple_img2 = genArcsNew testArc1 "img_tests/simplefig2.png" 1 (seedE+10) colorsD
 
 test_simple_img3 = genArcsNew testArc "img_tests/simplefig3.png" 0 (seedE+4) colorsE
   where testArc = createNewArc 0.6 0.2 0.8 0.4
 
-test_squarelimitN = genSquareLimitNew (createNewPattern testOut1) "img_tests/squarelimitN.png" 1
+test_squarelimitN = genSquareLimitNew (createNewPattern testOut1) "img_tests/squarelimitN.png" 2
 
-test_semiCirclesSquaresGen = genSemiCirclesSquares "img_tests/semiCiclesSquaresGen.png" 2 (seedE+120)
+test_semiCirclesSquaresGen = genTruchet "img_tests/semiCiclesSquaresGen.png" 2 (seedE+120)
 
 test_semiCicles = saveDrawing "img_tests/semiCicles.png" 1000 white semiCicles
 test_semiCiclesFill = saveDrawing "img_tests/semiCiclesFill.png" 1000 white semiCiclesFill
@@ -37,19 +37,19 @@ test_semiCiclesSquaresFill = saveDrawing "img_tests/semiCiclesSquaresFill.png" 1
 
 main :: IO ()
 main = do
-  --test_img
+  test_img
   --test_rot
   --test_rot45
   --test_img2
   --test_img3
-  --test_u
-  --test_t
+  test_u
+  test_t
   test_v
   --test_quartet
   test_side2
-  --test_corner2
-  --test_squarelimit2
-  --test_squarelimit3
+  test_corner2
+  test_squarelimit2
+  test_squarelimit3
   test_squarelimit4
 
   test_simple_img
