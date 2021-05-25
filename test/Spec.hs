@@ -3,6 +3,8 @@ import TestDrawings
 import CreateDrawings (white, colorsD)
 import Models
 
+-- Definição dos testes 
+
 test_img = saveDrawing "img_tests/img.png" 1000 white img_base
 test_rot = saveDrawing "img_tests/rot.png" 1000 white img_rot
 test_rot45 = saveDrawing "img_tests/rot45.png" 1000 white img_rot45
@@ -34,7 +36,7 @@ test_semiCiclesFill = saveDrawing "img_tests/semiCiclesFill.png" 1000 white semi
 test_semiCiclesSquares = saveDrawing "img_tests/semiCiclesSquares.png" 1000 white semiCiclesSquares
 test_semiCiclesSquaresFill = saveDrawing "img_tests/semiCiclesSquaresFill.png" 1000 white semiCiclesSquaresFill
 
-
+-- Executa os testes definidos
 main :: IO ()
 main = do
   test_img
