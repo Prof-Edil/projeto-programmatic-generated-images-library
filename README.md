@@ -1,5 +1,8 @@
 # Programmatic generated images library
 
+## Video
+Clique [aqui](https://youtu.be/MW2z7-PxI6k) para assistir a apresentação da biblioteca
+
 ## Descrição
 
 Biblioteca para a geração de imagens de forma programática através da utilização de operações e criações de estruturas baseadas em uma imagem geradora inicial, como visualizado no trabalho 'Functional Geometry' feito por Peter Henderson (https://eprints.soton.ac.uk/257577/1/funcgeo2.pdf). 
