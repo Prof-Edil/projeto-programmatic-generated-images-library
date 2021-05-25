@@ -1,4 +1,4 @@
-# projeto-programmatic-generated-images-library
+# Programmatic generated images library
 
 ## Descrição
 
