@@ -10,58 +10,66 @@ someFunc = putStrLn "someFunc"
 
 -- Tile - bloco unitário
 
+-- Dimensionamento
 scale :: Transformable a => Float -> a -> a
 scale s = transform (fmap (* s))
 
 -- Funções auxiliares para manipulação dos pontos
+
+-- Adiciona um valor ao segundo elemento (para aplicar shift vertical  numa imagem)
 addSnd :: Float -> Point -> Point
 addSnd a p = p + V2 0 a
 
+-- Adiciona um valor ao primeiro elemento (para aplicar shift horizontal  numa imagem)
 addFst :: Float -> Point -> Point
 addFst a p = p + V2 a 0
 
+-- Multiplica primeiro elemento do ponto por um valor
 multFst :: Float -> Point -> Point
 multFst a p = p * V2 a 1
 
+-- Multiplica segundo elemento do ponto por um valor 
 multSnd :: Float -> Point -> Point
 multSnd a p = p * V2 1 a
 
+-- Troca os valores
 swap :: Point -> Point 
 swap (V2 x y) = V2 y x
 
 -- Operações base
 
+-- Gira no eixo vertical
 flip :: Transformable a => a -> a
 flip = transform (addFst 1.multFst (-1))
 
 getProp :: Fractional a => a -> a -> a
 getProp f1 f2 = f1/(f1+f2)
 
-
+-- Sobrepõe duas entradas
 over :: [a] -> [a] -> [a]
 over = (++)
 
-
+-- Duas entradas uma acima da outra e dimensiona pela escala dada
 aboveScaled :: Transformable a => Float -> Float -> [a] -> [a] -> [a]
 aboveScaled f1 f2 img1 img2 = trans1 `over` trans2
        where trans1 = transform (multSnd (getProp f1 f2)) img1
              trans2 = transform (addSnd (getProp f1 f2).multSnd (getProp f2 f1)) img2
 
-
+-- Duas entradas uma acima da outra 
 above :: Transformable a => [a] -> [a] -> [a]
 above = aboveScaled 1 1
 
-
+-- Duas entradas uma ao lado da outra e dimensiona pela escala dada
 besideScaled :: Transformable a => Float -> Float -> [a] -> [a] -> [a]
 besideScaled f1 f2 img1 img2 = trans1 `over` trans2
        where trans1 = transform (multFst (getProp f1 f2)) img1
              trans2 = transform (addFst (getProp f1 f2).multFst (getProp f2 f1)) img2
 
-
+-- Duas entradas uma ao lado da outra 
 beside :: Transformable a => [a] -> [a] -> [a]
 beside = besideScaled 1 1
 
-
+-- Função pura para abstrair o número de randomIO
 getRandomIO :: Float -> Float
 getRandomIO n = 3*n 
 
@@ -97,28 +105,3 @@ rot45 = transform (\p -> (*0.5) <$> (addFst (sum p).multFst 0 $ p - (swap p)))
 
 blank :: [a]
 blank = []
-
---------------------AQUI
--------------------------------------- 
-{-|
-genArcs :: FilePath -> Integer -> Int -> [PixelRGBA8] -> IO ()
-genArcs path n seed colors = drawAndWriteArcs path (arcLimit n arc) n colors seed
-
-
-genArcsNew :: (Geometry geom, Transformable geom) => [geom] -> FilePath -> Integer -> Int -> [PixelRGBA8] -> IO ()
-genArcsNew img path n seed colors = drawAndWriteArcs path (arcLimit n img) n colors seed
-
-createNewArc :: Float -> Float -> Float -> Float -> [CubicBezier]
-createNewArc x1 y1 x2 y2 = [CubicBezier (V2 0.5 0.0) (V2 x1 y1) (V2 x2 y2) (V2 1.0 0.5)]
-
-drawAndWriteArcs :: (Geometry geom, Transformable geom) => FilePath -> [geom] -> Integer -> [PixelRGBA8] -> Int -> IO ()
-drawAndWriteArcs path base_img n colors seed = do
-    let white = PixelRGBA8 255 255 255 255
-        black = PixelRGBA8 0 0 0 255
-        img = renderDrawing 1200 1200 white $
-            withTexture (uniformTexture black) $ do
-                sequence_ (applyFuncs (zip (colorBlocks n colors seed) (blocks n)))
-                mconcat $ (\b -> stroke (35/ (2 ** fromInteger (n))) JoinRound (CapRound, CapRound) b) <$> scale 1200 base_img
-    writePng path img
--}
-----------------------------
